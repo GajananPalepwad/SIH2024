@@ -1,7 +1,6 @@
-package com.plcoding.backgroundlocationtracking
+package com.plcoding.backgroundlocationtracking.locationClasses
 
 import android.app.AlarmManager
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -13,6 +12,7 @@ import android.os.IBinder
 import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.LocationServices
+import com.plcoding.backgroundlocationtracking.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

@@ -1,4 +1,4 @@
-package com.plcoding.backgroundlocationtracking
+package com.plcoding.backgroundlocationtracking.locationClasses
 
 import android.Manifest
 import android.content.Context

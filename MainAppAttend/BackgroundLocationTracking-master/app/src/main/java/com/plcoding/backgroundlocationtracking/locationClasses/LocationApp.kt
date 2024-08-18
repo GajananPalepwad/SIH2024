@@ -1,4 +1,4 @@
-package com.plcoding.backgroundlocationtracking
+package com.plcoding.backgroundlocationtracking.locationClasses
 
 import android.app.Application
 import android.app.NotificationChannel
