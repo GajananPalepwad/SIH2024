@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.plcoding.backgroundlocationtracking.locationClasses.LocationService
 import com.plcoding.backgroundlocationtracking.navigation.Navigation
 import com.plcoding.backgroundlocationtracking.ui.theme.BackgroundLocationTrackingTheme
@@ -35,22 +36,22 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) {
 //////////////////////////////////Buttons to start and end background services////////////////////////////////////
-                    Row {
-                        Button(onClick = {
-                            Intent(applicationContext, LocationService::class.java).apply {
-                                action = LocationService.ACTION_START
-                                startService(this)
-                            }
-                        }) { Text(text = "Start") }
-                        Button(onClick = {
-                            Intent(applicationContext, LocationService::class.java).apply {
-                                action = LocationService.ACTION_STOP
-                                startService(this)
-                            }
-                        }) { Text(text = "Stop") }
-                    }
+//                    Row {
+//                        Button(onClick = {
+//                            Intent(applicationContext, LocationService::class.java).apply {
+//                                action = LocationService.ACTION_START
+//                                startService(this)
+//                            }
+//                        }) { Text(text = "Start") }
+//                        Button(onClick = {
+//                            Intent(applicationContext, LocationService::class.java).apply {
+//                                action = LocationService.ACTION_STOP
+//                                startService(this)
+//                            }
+//                        }) { Text(text = "Stop") }
+//                    }
 
-                    Navigation(navController = NavHostController(LocalContext.current))
+                    Navigation(navController = rememberNavController())
                 }
 
             }
