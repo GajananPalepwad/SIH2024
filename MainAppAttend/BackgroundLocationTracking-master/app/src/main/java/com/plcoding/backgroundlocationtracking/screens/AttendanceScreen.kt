@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -42,6 +43,7 @@ import com.plcoding.backgroundlocationtracking.R
 import com.plcoding.backgroundlocationtracking.ui.theme.DarkGray
 import com.plcoding.backgroundlocationtracking.ui.theme.LightGray
 import com.plcoding.backgroundlocationtracking.ui.theme.appColor
+import com.plcoding.backgroundlocationtracking.ui.theme.appColorTransparent
 
 
 @Composable
@@ -219,17 +221,22 @@ fun CheckInCard(title: String, time: String,date: String,sideText: String) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(16.dp, 10.dp, 16.dp, 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            Icon(
-                painter = painterResource(id = R.drawable.check_in),
-                contentDescription = "Check In Icon",
-                tint = Color(0xFF44D39B),
-                modifier = Modifier.size(24.dp)
-            )
+            Card(shape = CircleShape,
+                backgroundColor = appColorTransparent,
+            ){
+                Icon(
+                    painter = painterResource(id = R.drawable.check_in),
+                    contentDescription = "Check In Icon",
+                    tint = appColor,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+
             Spacer(modifier = Modifier.width(10.dp))
 
             Row (
