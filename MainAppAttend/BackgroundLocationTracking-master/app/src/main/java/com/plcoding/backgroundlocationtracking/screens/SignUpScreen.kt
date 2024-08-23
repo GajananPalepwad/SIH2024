@@ -151,7 +151,7 @@ fun SignUpScreen( navController: NavController
             onClick = {
 
                 //TODO Save mobile number to SharedPreferences
-                navController.navigate(Screen.HomeScreen.route)
+                navController.navigate(Screen.MainScaffoldScreen.route)
 
 
             },

@@ -9,6 +9,7 @@ val Teal200 = Color(0xFF03DAC5)
 val DarkGray = Color(0xFF080B0F)
 val LightGray = Color(0xFF15181E)
 val appColor = Color(0xFF4EFEC9)
+val LightGrayDark = Color(0xFFF5F5F5)
 val appColorTransparent = Color(0x144EFEC9)
 
 val PinkPurpleLight = Color(0xFFE1BEE7) // A lighter variant of PinkPurple

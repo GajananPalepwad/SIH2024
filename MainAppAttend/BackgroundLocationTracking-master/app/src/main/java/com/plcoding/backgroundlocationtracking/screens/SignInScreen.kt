@@ -122,7 +122,7 @@ fun SignInScreen(
         Button(
             onClick = {
                 //TODO Sign In
-                navController.navigate(Screen.HomeScreen.route)
+                navController.navigate(Screen.MainScaffoldScreen.route)
 
             },
             modifier = Modifier

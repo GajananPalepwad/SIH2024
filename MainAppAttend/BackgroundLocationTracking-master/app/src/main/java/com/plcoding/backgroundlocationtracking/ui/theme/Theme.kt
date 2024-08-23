@@ -14,8 +14,8 @@ private val DarkColorPalette = darkColorScheme(
     tertiary = Teal200,
     background = DarkGray,
     surface = LightGray,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
+    onPrimary = Color.Black,
+    onSecondary = Color.White,
     onBackground = Color.White,
     onSurface = Color.White
 )
