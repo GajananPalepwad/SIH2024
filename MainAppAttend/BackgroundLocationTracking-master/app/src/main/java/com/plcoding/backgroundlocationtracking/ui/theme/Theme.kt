@@ -1,30 +1,35 @@
 package com.plcoding.backgroundlocationtracking.ui.theme
 
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.Typography
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+private val DarkColorPalette = darkColorScheme(
+    primary = PinkPurple,
+    secondary = Purple700,
+    tertiary = Teal200,
+    background = DarkGray,
+    surface = LightGray,
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onBackground = Color.White,
+    onSurface = Color.White
 )
 
-private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
+private val LightColorPalette = lightColorScheme(
+    primary = Purple500Light,
+    secondary = Purple700Light,
+    tertiary = Teal200Light,
+    background = DarkGrayLight,
+    surface = LightGrayLight,
     onPrimary = Color.White,
     onSecondary = Color.Black,
     onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+    onSurface = Color.Black
 )
 
 @Composable
@@ -38,10 +43,12 @@ fun BackgroundLocationTrackingTheme(
         LightColorPalette
     }
 
+    // Initialize typography using MaterialTheme's default typography
+    val typography = Typography()
+
     MaterialTheme(
-        colors = colors,
-        typography = Typography,
-        shapes = Shapes,
+        colorScheme = colors,
+        typography = typography,
         content = content
     )
 }
