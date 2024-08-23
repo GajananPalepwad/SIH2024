@@ -95,7 +95,7 @@ fun SignInScreen(
                             ImageVector.vectorResource(R.drawable.baseline_visibility_24)
                         else ImageVector.vectorResource(R.drawable.baseline_visibility_off_24),
                         contentDescription = "Password visibility",
-                        tint = if (passwordVisible.value) colorResource(id = R.color.purple_700) else Color.Gray
+                        tint = if (passwordVisible.value) MaterialTheme.colorScheme.primary else Color.Gray
                     )
                 }
             },
@@ -127,11 +127,11 @@ fun SignInScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 10.dp)
+                .padding(bottom = 10.dp, top = 10.dp)
                 .height(50.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimary)
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
-            Text(text = "Sign In", color = MaterialTheme.colorScheme.primary)
+            Text(text = "Sign In", color = MaterialTheme.colorScheme.surface)
         }
 
         // Sign Up Text

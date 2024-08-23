@@ -3,6 +3,7 @@ package com.plcoding.backgroundlocationtracking.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,17 +28,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.plcoding.backgroundlocationtracking.R
 import com.plcoding.backgroundlocationtracking.components.AppBottomBar
 import com.plcoding.backgroundlocationtracking.navigation.Screen
+import com.plcoding.backgroundlocationtracking.ui.theme.LightGray
 
 @Composable
 fun MainScaffoldScreen(
     navController: NavController
-){
+) {
     var currentScreen by rememberSaveable { mutableStateOf(Screen.HomeScreen) }
     Scaffold(
         topBar = {
@@ -62,33 +68,51 @@ fun MainScaffoldScreen(
 }
 
 @Composable
+@Preview(showBackground = true, showSystemUi = true)
 fun ProfileSection() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
-            .padding(start = 16.dp, end = 16.dp, top = 30.dp, bottom = 16.dp)
+//            .background(LightGray)
+            .padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 5.dp)
     ) {
         Image(
             painter = painterResource(id = R.drawable.profile), // Replace with actual profile image
             contentDescription = "Profile Picture",
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
             modifier = Modifier
                 .size(50.dp)
                 .clip(CircleShape)
                 .border(1.dp, MaterialTheme.colorScheme.onSecondary, CircleShape)
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Column {
-            Text("Gajanan Palepwad", style = typography.bodyLarge, color = MaterialTheme.colorScheme.onSecondary)
-            Text("Head of UX Design", style = typography.bodySmall, color = MaterialTheme.colorScheme.onSecondary)
+        Column (modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.SpaceBetween){
+            Text(
+                "Gajanan Palepwad",
+                style = typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontSize = 19.sp
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(
+                "Head of UX Design",
+                style = typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
-        Spacer(modifier = Modifier.weight(1f))
         IconButton(onClick = { /* Notification Click */ }) {
             Icon(
-                Icons.Default.Notifications,
+                ImageVector.vectorResource(R.drawable.bell_ic),
                 contentDescription = "Notifications",
-                tint = MaterialTheme.colorScheme.onBackground
+                tint = MaterialTheme.colorScheme.onSecondary,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
+                    .padding(10.dp)
+                    .size(55.dp)
             )
         }
     }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,8 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.plcoding.backgroundlocationtracking.R
-import com.plcoding.backgroundlocationtracking.ui.theme.appColor
-import com.plcoding.backgroundlocationtracking.ui.theme.appColorTransparent
 
 @Composable
 fun HomeScreen(navController: NavController, paddingValues: PaddingValues) {
@@ -54,7 +53,6 @@ fun HomeScreen(navController: NavController, paddingValues: PaddingValues) {
         AttendanceDetailsSection(typography)
     }
 }
-
 
 
 @Composable
@@ -81,7 +79,12 @@ fun AttendanceDetailsSection(typography: androidx.compose.material3.Typography) 
             Spacer(modifier = Modifier.height(10.dp))
 
             // Attendances Section
-            Text("Your Attendances", style = typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(8.dp))
+            Text(
+                "Your Attendances",
+                style = typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(8.dp)
+            )
             CheckInCard("Check In", "07:47", "August 21, 2024", "Early 13 mins")
         }
     }
@@ -97,15 +100,35 @@ fun AttendanceSummary() {
             val modifier = Modifier
                 .weight(1f)
                 .padding(5.dp, 8.dp, 5.dp, 0.dp)
-            AttendanceInfoCard("08:46", "Checked In", ImageVector.vectorResource(R.drawable.check_in), modifier)
-            AttendanceInfoCard("17:15", "Checked Out", ImageVector.vectorResource(R.drawable.check_out), modifier)
+            AttendanceInfoCard(
+                "08:46",
+                "Checked In",
+                ImageVector.vectorResource(R.drawable.check_in),
+                modifier
+            )
+            AttendanceInfoCard(
+                "17:15",
+                "Checked Out",
+                ImageVector.vectorResource(R.drawable.check_out),
+                modifier
+            )
         }
         Row {
             val modifier = Modifier
                 .weight(1f)
                 .padding(5.dp, 10.dp, 5.dp, 0.dp)
-            AttendanceInfoCard("96%", "On Time", ImageVector.vectorResource(R.drawable.tick_ic), modifier)
-            AttendanceInfoCard("28 days", "Total Attended", ImageVector.vectorResource(R.drawable.calendar_ic), modifier)
+            AttendanceInfoCard(
+                "96%",
+                "On Time",
+                ImageVector.vectorResource(R.drawable.tick_ic),
+                modifier
+            )
+            AttendanceInfoCard(
+                "28 days",
+                "Total Attended",
+                ImageVector.vectorResource(R.drawable.calendar_ic),
+                modifier
+            )
         }
     }
 }
@@ -117,15 +140,25 @@ fun TodayTasksSection(typography: androidx.compose.material3.Typography) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("Today Tasks", style = typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(8.dp))
-        Text("See more", style = typography.bodySmall, color = appColor, modifier = Modifier.padding(8.dp))
+        Text(
+            "Today Tasks",
+            style = typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(8.dp)
+        )
+        Text(
+            "See more",
+            style = typography.bodyLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(8.dp),
+            fontWeight = FontWeight.SemiBold
+        )
     }
 
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(3.dp, 0.dp, 3.dp, 0.dp)
     ) {
         val modifier = Modifier
             .weight(1f)
@@ -139,7 +172,7 @@ fun TodayTasksSection(typography: androidx.compose.material3.Typography) {
 fun AttendanceInfoCard(time: String, label: String, icon: ImageVector, modifier: Modifier) {
     Card(
         colors = CardDefaults.cardColors(
-            MaterialTheme.colorScheme.surface
+            MaterialTheme.colorScheme.background
         ),
         shape = RoundedCornerShape(15.dp),
         modifier = modifier
@@ -155,11 +188,26 @@ fun AttendanceInfoCard(time: String, label: String, icon: ImageVector, modifier:
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(time, color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.bodyMedium)
-                Icon(icon, contentDescription = label, tint = MaterialTheme.colorScheme.onBackground)
+                Text(
+                    time,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp,
+                )
+                Icon(
+                    icon,
+                    contentDescription = label,
+                    tint = MaterialTheme.colorScheme.onSecondary,
+                    modifier = Modifier.size(30.dp)
+                )
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(label, color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                label,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 15.sp,
+                modifier = Modifier.align(Alignment.Start)
+            )
         }
     }
 }
@@ -168,7 +216,7 @@ fun AttendanceInfoCard(time: String, label: String, icon: ImageVector, modifier:
 fun TaskCard(title: String, time: String, progress: Float, modifier: Modifier) {
     Card(
         colors = CardDefaults.cardColors(
-            MaterialTheme.colorScheme.surface
+            MaterialTheme.colorScheme.background
         ),
         shape = RoundedCornerShape(15.dp),
         modifier = modifier
@@ -177,14 +225,24 @@ fun TaskCard(title: String, time: String, progress: Float, modifier: Modifier) {
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(title, color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.bodyLarge, maxLines = 1)
+            Text(
+                title,
+                color = MaterialTheme.colorScheme.onSecondary,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(time, color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.bodySmall)
+            Text(
+                time,
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.bodySmall,
+                fontSize = 14.sp
+            )
             Spacer(modifier = Modifier.height(16.dp))
             LinearProgressIndicator(
                 progress = progress,
                 modifier = Modifier.fillMaxWidth(),
-                color = appColor,
+                color = MaterialTheme.colorScheme.primary,
             )
         }
     }
@@ -194,7 +252,7 @@ fun TaskCard(title: String, time: String, progress: Float, modifier: Modifier) {
 fun CheckInCard(title: String, time: String, date: String, sideText: String) {
     Card(
         colors = CardDefaults.cardColors(
-            MaterialTheme.colorScheme.surface
+            MaterialTheme.colorScheme.background
         ),
         shape = RoundedCornerShape(15.dp),
         modifier = Modifier.fillMaxWidth()
@@ -208,12 +266,12 @@ fun CheckInCard(title: String, time: String, date: String, sideText: String) {
         ) {
             Card(
                 shape = CircleShape,
-                colors = CardDefaults.cardColors(appColorTransparent),
+                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiary),
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.check_in),
                     contentDescription = "Check In Icon",
-                    tint = appColor,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(8.dp)
                 )
             }
@@ -229,14 +287,14 @@ fun CheckInCard(title: String, time: String, date: String, sideText: String) {
                     Text(
                         text = title,
                         style = MaterialTheme.typography.bodyLarge.copy(
-                            color = MaterialTheme.colorScheme.onBackground,
+                            color = MaterialTheme.colorScheme.onSecondary,
                             fontWeight = FontWeight.SemiBold
                         )
                     )
                     Text(
                         text = date,
                         style = MaterialTheme.typography.bodySmall.copy(
-                            color = Color(0xFFA3A3A3),
+                            color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 14.sp
                         )
                     )
@@ -246,7 +304,7 @@ fun CheckInCard(title: String, time: String, date: String, sideText: String) {
                     Text(
                         text = time,
                         style = MaterialTheme.typography.bodyLarge.copy(
-                            color = appColor,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 20.sp
                         ),
@@ -255,7 +313,7 @@ fun CheckInCard(title: String, time: String, date: String, sideText: String) {
                     Text(
                         text = sideText,
                         style = MaterialTheme.typography.bodySmall.copy(
-                            color = Color(0xFFA3A3A3),
+                            color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 14.sp
                         )
                     )
@@ -265,8 +323,9 @@ fun CheckInCard(title: String, time: String, date: String, sideText: String) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun AttendanceScreenPreview() {
-    AttendanceScreen(navController = NavController(LocalContext.current))
+    val typography = MaterialTheme.typography
+    AttendanceDetailsSection(typography)
 }
