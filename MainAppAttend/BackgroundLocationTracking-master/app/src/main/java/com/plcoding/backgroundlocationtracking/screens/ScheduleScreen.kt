@@ -2,7 +2,6 @@ package com.plcoding.backgroundlocationtracking.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.benchmark.perfetto.Row
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,14 +24,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,17 +47,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.plcoding.backgroundlocationtracking.ui.theme.DarkGray
-import com.plcoding.backgroundlocationtracking.ui.theme.LightGray
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
+val monthYear = MutableStateFlow("Mar 2023")
+val selectedFullDate = MutableStateFlow("")
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScheduleScreen(navController: NavController) {
     DashboardScreen()
+    setValues()
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -123,12 +121,16 @@ fun CalendarHeader() {
                     .padding(8.dp)
             )
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                val monthYear by monthYear.collectAsState()
+
                 Text(
-                    "Mar 2023",
+                    monthYear,
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontWeight = FontWeight.SemiBold,
                 )
-                Text("Wed, 8 March 2023", color = Color.Gray)
+                val selectedDate by selectedFullDate.collectAsState()
+                Text(selectedDate, color = Color.Gray)
+
             }
             Icon(
                 ImageVector.vectorResource(R.drawable.calendar2_ic),
@@ -150,15 +152,24 @@ fun CalendarHeader() {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
+fun setValues(){
+    val date = LocalDate.now()
+    selectedFullDate.value = "${date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())}, ${date.dayOfMonth} ${date.month.getDisplayName(TextStyle.SHORT, Locale.getDefault())} ${date.year}"
+    monthYear.value = "${date.month.getDisplayName(TextStyle.SHORT, Locale.getDefault())} ${date.year}"
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DynamicCalendar() {
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+
 
     // Calculate the middle index to center the current date
     val startIndex = Int.MAX_VALUE / 2
 
     // Scroll state for LazyRow
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = startIndex - 3)
+
 
     LazyRow(
         state = listState, // Set the initial scroll position to center the current date
@@ -170,7 +181,7 @@ fun DynamicCalendar() {
             // Calculate the date based on the index
             val date = LocalDate.now().plusDays(index - startIndex.toLong())
             DateCircle(
-                day = date.dayOfMonth.toString(),
+                date = date,
                 label = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
                 isSelected = date == selectedDate,
                 onDateSelected = { selectedDate = date }
@@ -179,8 +190,9 @@ fun DynamicCalendar() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DateCircle(day: String, label: String, isSelected: Boolean = false, onDateSelected: () -> Unit) {
+fun DateCircle(date: LocalDate, label: String, isSelected: Boolean = false, onDateSelected: () -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             contentAlignment = Alignment.Center,
@@ -188,10 +200,13 @@ fun DateCircle(day: String, label: String, isSelected: Boolean = false, onDateSe
                 .size(40.dp)
                 .clip(CircleShape)
                 .background(if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent)
-                .clickable(onClick = onDateSelected)
+                .clickable {
+                    onDateSelected()
+                    selectedFullDate.value = "${label}, ${date.dayOfMonth} ${date.month.getDisplayName(TextStyle.SHORT, Locale.getDefault())} ${date.year}"
+                }
         ) {
             Text(
-                text = day,
+                text = date.dayOfMonth.toString(),
                 color = if (isSelected) MaterialTheme.colorScheme.onPrimary else Color.Gray
             )
         }
