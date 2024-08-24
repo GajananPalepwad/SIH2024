@@ -46,10 +46,10 @@ fun MainScaffoldScreen(
 ) {
     var currentScreen by rememberSaveable { mutableStateOf(Screen.HomeScreen) }
     Scaffold(
-        topBar = {
-            //TODO: Add top bar
-            ProfileSection()
-        },
+//        topBar = {
+//            //TODO: Add top bar
+//            ProfileSection()
+//        },
         containerColor = MaterialTheme.colorScheme.primary,
         bottomBar = {
             AppBottomBar(onItemSelected = { screen ->
@@ -59,61 +59,10 @@ fun MainScaffoldScreen(
     ) { paddingValues ->
         when (currentScreen) {
             Screen.HomeScreen -> HomeScreen(navController, paddingValues)
-            Screen.AttendanceScreen -> AttendanceScreen(navController = navController)
+            Screen.ScheduleScreen -> ScheduleScreen(navController = navController)
             Screen.AnalyticsScreen -> AnalyticsScreen(navController = navController)
             Screen.SettingsScreen -> SettingsScreen(navController)
             else -> HomeScreen(navController, paddingValues)
-        }
-    }
-}
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun ProfileSection() {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
-//            .background(LightGray)
-            .padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 5.dp)
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.profile), // Replace with actual profile image
-            contentDescription = "Profile Picture",
-            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
-            modifier = Modifier
-                .size(50.dp)
-                .clip(CircleShape)
-                .border(1.dp, MaterialTheme.colorScheme.onSecondary, CircleShape)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Column (modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.SpaceBetween){
-            Text(
-                "Gajanan Palepwad",
-                style = typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSecondary,
-                fontSize = 19.sp
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-            Text(
-                "Head of UX Design",
-                style = typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        }
-        IconButton(onClick = { /* Notification Click */ }) {
-            Icon(
-                ImageVector.vectorResource(R.drawable.bell_ic),
-                contentDescription = "Notifications",
-                tint = MaterialTheme.colorScheme.onSecondary,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
-                    .padding(10.dp)
-                    .size(55.dp)
-            )
         }
     }
 }

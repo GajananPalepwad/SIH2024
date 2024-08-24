@@ -1,6 +1,9 @@
 package com.plcoding.backgroundlocationtracking.screens
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,12 +20,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -46,7 +52,7 @@ fun HomeScreen(navController: NavController, paddingValues: PaddingValues) {
             .background(MaterialTheme.colorScheme.background),
     ) {
         // Top Profile Section
-
+        ProfileSection()
         Spacer(modifier = Modifier.height(16.dp))
 
         // Attendance Details Section
@@ -79,13 +85,80 @@ fun AttendanceDetailsSection(typography: androidx.compose.material3.Typography) 
             Spacer(modifier = Modifier.height(10.dp))
 
             // Attendances Section
-            Text(
-                "Your Attendances",
-                style = typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(8.dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    "Your Attendances",
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(8.dp).weight(1f),
+                    fontSize = 16.sp
+                )
+
+                Text(
+                    "See more",
+                    style = typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(8.dp),
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
             CheckInCard("Check In", "07:47", "August 21, 2024", "Early 13 mins")
+        }
+    }
+}
+
+@Composable
+fun ProfileSection() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
+//            .background(LightGray)
+            .padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 5.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.profile), // Replace with actual profile image
+            contentDescription = "Profile Picture",
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+            modifier = Modifier
+                .size(50.dp)
+                .clip(CircleShape)
+                .border(1.dp, MaterialTheme.colorScheme.onSecondary, CircleShape)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                "Gajanan Palepwad",
+                style = typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontSize = 19.sp
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(
+                "Head of UX Design",
+                style = typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+        IconButton(onClick = { /* Notification Click */ }) {
+            Icon(
+                ImageVector.vectorResource(R.drawable.bell_ic),
+                contentDescription = "Notifications",
+                tint = MaterialTheme.colorScheme.onSecondary,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
+                    .padding(10.dp)
+                    .size(55.dp)
+            )
         }
     }
 }
@@ -142,9 +215,10 @@ fun TodayTasksSection(typography: androidx.compose.material3.Typography) {
     ) {
         Text(
             "Today Tasks",
-            style = typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.padding(8.dp)
+            color = MaterialTheme.colorScheme.onSecondary,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(8.dp).weight(1f),
+            fontSize = 16.sp
         )
         Text(
             "See more",
@@ -323,7 +397,7 @@ fun CheckInCard(title: String, time: String, date: String, sideText: String) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true, showSystemUi = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun AttendanceScreenPreview() {
     val typography = MaterialTheme.typography

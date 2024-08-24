@@ -1,12 +1,19 @@
 package com.plcoding.backgroundlocationtracking.ui.theme
 
+import android.app.Activity
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.Typography
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
+import com.plcoding.backgroundlocationtracking.R
 
 private val DarkColorPalette = darkColorScheme(
     primary = appColorForDark,
@@ -41,6 +48,20 @@ fun BackgroundLocationTrackingTheme(
         DarkColorPalette
     } else {
         LightColorPalette
+    }
+
+    val view = LocalView.current
+    SideEffect {
+        val window = (view.context as Activity).window
+        val statusBarColor = if (darkTheme) {
+            view.context.getColor(R.color.light_gray)
+        } else {
+            view.context.getColor(R.color.light_gray_light)
+        }
+        window.statusBarColor = statusBarColor
+        WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = !darkTheme
     }
 
     // Initialize typography using MaterialTheme's default typography

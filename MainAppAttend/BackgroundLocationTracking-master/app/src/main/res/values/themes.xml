@@ -5,4 +5,5 @@
         <item name="android:statusBarColor">@color/light_gray</item>
 
     </style>
+
 </resources>
