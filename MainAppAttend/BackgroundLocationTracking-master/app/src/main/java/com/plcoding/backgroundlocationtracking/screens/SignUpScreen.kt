@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,13 +42,13 @@ import com.plcoding.backgroundlocationtracking.R
 import com.plcoding.backgroundlocationtracking.navigation.Screen
 
 @Composable
-fun SignUpScreen( navController: NavController
-){
+fun SignUpScreen(
+    navController: NavController
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface) //TODO Color is not showing black
-            .padding(16.dp),
+            .background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -66,120 +68,151 @@ fun SignUpScreen( navController: NavController
         }
         val context = LocalContext.current
 
-        OutlinedTextField(
-            value = mobilenumber,
-            onValueChange = { mobilenumber = it },
-            label = { Text("Mobile Number") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 15.dp),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-                focusedTextColor = MaterialTheme.colorScheme.secondary,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                errorLabelColor = MaterialTheme.colorScheme.error,
-
-                )
-        )
-
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it.trim() },
-            label = { Text("Email") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 15.dp),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-                focusedTextColor = MaterialTheme.colorScheme.secondary,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                errorLabelColor = MaterialTheme.colorScheme.error,
-
-                )
-        )
-
-
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it.trim() },
-            label = { Text("Password") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password
-            ),
-            trailingIcon = {
-                IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
-                    Icon(
-                        imageVector = if (passwordVisible.value)
-                            ImageVector.vectorResource(R.drawable.baseline_visibility_24)
-                        else ImageVector.vectorResource(R.drawable.baseline_visibility_off_24),
-                        contentDescription = "Password visibility",
-                        tint = if (passwordVisible.value) colorResource(id = R.color.purple_700) else Color.Gray
-                    )
-                }
-            },
-            visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 15.dp),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-                focusedTextColor = MaterialTheme.colorScheme.secondary,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                errorLabelColor = MaterialTheme.colorScheme.error,
-
-                )
-        )
-
-        // Sign Up Button
-        Button(
-            onClick = {
-
-                //TODO Save mobile number to SharedPreferences
-                navController.navigate(Screen.MainScaffoldScreen.route)
-
-
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp)
-                .height(50.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimary)
-        ) {
-            Text(text = "Create Account", color = MaterialTheme.colorScheme.primary)
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = "Sign Up",
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+                fontWeight = MaterialTheme.typography.headlineMedium.fontWeight,
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(bottom = 50.dp, start = 20.dp, top = 20.dp),
+            )
         }
 
-        // Sign Up Text
-        TextButton(onClick = {
-            navController.navigateUp()
-        }) {
-            Text(
-                text = "Already have an account? Sign In.",
-                color = MaterialTheme.colorScheme.secondary,
-                textAlign = TextAlign.Center,
-                fontSize = MaterialTheme.typography.titleMedium.fontSize
-            )
+        Card(
+            shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            Column(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.surface)
+                    .fillMaxSize()
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.Bottom,
+            ) {
+
+                OutlinedTextField(
+                    value = mobilenumber,
+                    onValueChange = { mobilenumber = it },
+                    label = { Text("Mobile Number") },
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.medium,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 15.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        errorLabelColor = MaterialTheme.colorScheme.error,
+
+                        )
+                )
+
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it.trim() },
+                    label = { Text("Email") },
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.medium,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 15.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        errorLabelColor = MaterialTheme.colorScheme.error,
+
+                        )
+                )
+
+
+
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it.trim() },
+                    label = { Text("Password") },
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.medium,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password
+                    ),
+                    trailingIcon = {
+                        IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
+                            Icon(
+                                imageVector = if (passwordVisible.value)
+                                    ImageVector.vectorResource(R.drawable.baseline_visibility_24)
+                                else ImageVector.vectorResource(R.drawable.baseline_visibility_off_24),
+                                contentDescription = "Password visibility",
+                                tint = if (passwordVisible.value) colorResource(id = R.color.purple_700) else Color.Gray
+                            )
+                        }
+                    },
+                    visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 15.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        errorLabelColor = MaterialTheme.colorScheme.error,
+
+                        )
+                )
+
+                // Sign Up Button
+                Button(
+                    onClick = {
+
+                        //TODO Save mobile number to SharedPreferences
+                        navController.navigate(Screen.MainScaffoldScreen.route)
+
+
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 10.dp)
+                        .height(50.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(text = "Create Account", color = MaterialTheme.colorScheme.onPrimary)
+                }
+
+                // Sign Up Text
+                TextButton(onClick = {
+                    navController.navigateUp()
+                }) {
+                    Text(
+                        text = "Already have an account? Sign In.",
+                        color = MaterialTheme.colorScheme.secondary,
+                        textAlign = TextAlign.Center,
+                        fontSize = MaterialTheme.typography.titleMedium.fontSize
+                    )
+                }
+            }
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun SignUpScreenPreview(){
+fun SignUpScreenPreview() {
     SignUpScreen(navController = NavController(LocalContext.current))
 }

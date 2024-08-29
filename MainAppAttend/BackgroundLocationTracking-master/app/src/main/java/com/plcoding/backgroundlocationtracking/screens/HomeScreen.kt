@@ -141,7 +141,7 @@ fun ProfileSection() {
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 19.sp
             )
-            Spacer(modifier = Modifier.width(5.dp))
+            Spacer(modifier = Modifier.height(5.dp))
             Text(
                 "Head of UX Design",
                 style = typography.bodySmall,
