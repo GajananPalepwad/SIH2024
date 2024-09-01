@@ -45,7 +45,7 @@ fun AppBottomBar(onItemSelected: (Screen) -> Unit) {
             route = Screen.ScheduleScreen
         ),
         BottomNavigationItem(
-            title = "Aanalytics",
+            title = "Analytics",
             selectedIcon = ImageVector.vectorResource(R.drawable.filled_analytics_ic),
             unselectedIcon = ImageVector.vectorResource(R.drawable.analytics_ic),
             route = Screen.AnalyticsScreen

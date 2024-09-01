@@ -1,5 +1,7 @@
 package com.plcoding.backgroundlocationtracking.screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,6 +42,7 @@ import com.plcoding.backgroundlocationtracking.components.AppBottomBar
 import com.plcoding.backgroundlocationtracking.navigation.Screen
 import com.plcoding.backgroundlocationtracking.ui.theme.LightGray
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScaffoldScreen(
     navController: NavController
