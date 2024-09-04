@@ -2,82 +2,140 @@ package com.plcoding.backgroundlocationtracking.screens
 
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.plcoding.backgroundlocationtracking.R
 
-
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AnalyticsScreen(navController: NavController){
-    DashboardScreen1()
-}
+fun AnalyticsScreen(navController: NavController, paddingValues: PaddingValues) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(paddingValues),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val pagerState = rememberPagerState(0, pageCount = { 2 })
 
-@Composable
-fun BarChart(modifier: Modifier = Modifier, data: List<Pair<String, Float>>, maxValue: Float, label: String) {
-    Canvas(modifier = modifier) {
-        val barHeight = size.height / data.size.toFloat()
-        val maxBarWidth = size.width
-
-        data.forEachIndexed { index, item ->
-            val barWidth = (item.second / maxValue) * maxBarWidth
-            val yOffset = index * barHeight
-
-            // Draw bar
-            drawRect(
-                color = Color(0xFF00D1B2),
-                topLeft = Offset(0f, yOffset + barHeight / 4),
-                size = Size(barWidth, barHeight / 2),
-            )
-
-            // Draw text labels
-            drawContext.canvas.nativeCanvas.apply {
-                val textPaint = Paint().apply {
-                    color = android.graphics.Color.WHITE
-                    textSize = 36f
-                }
-                drawText(item.first, 0f, yOffset + barHeight / 2, textPaint)
-                drawText(item.second.toString(), barWidth + 10, yOffset + barHeight / 2, textPaint)
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxSize()
+        ) { page ->
+            when (page) {
+                0 -> WeeklyBarChart()
+                1 -> MonthlyBarChart()
             }
         }
 
-        // Draw axis labels
-        drawContext.canvas.nativeCanvas.apply {
-            val textPaint = Paint().apply {
-                color = android.graphics.Color.WHITE
-                textSize = 36f
-            }
-            drawText(label, maxBarWidth / 2 - textPaint.measureText(label) / 2, size.height + 40, textPaint)
-        }
     }
 }
 
 @Composable
-fun DashboardScreen1() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(32.dp)
-    ) {
+fun BarChart(
+    modifier: Modifier = Modifier,
+    data: List<Pair<String, Float>>,
+    maxValue: Float,
+    label: String
+) {
+        Column (
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Canvas(modifier = modifier) {
+                val barWidth = size.width / data.size
+                val maxBarHeight = size.height
 
+                data.forEachIndexed { index, item ->
+                    val barHeight = (item.second / maxValue) * maxBarHeight
+                    val xOffset = index * barWidth
+
+                    // Draw bar with border
+                    drawRect(
+                        color = Color(0xFF00D1B2),
+                        topLeft = Offset(xOffset.toFloat() + barWidth / 4, maxBarHeight - barHeight),
+                        size = Size(barWidth / 2, barHeight)
+                    )
+
+                    // Draw text labels
+                    drawContext.canvas.nativeCanvas.apply {
+                        val textPaint = Paint().apply {
+                            color = android.graphics.Color.WHITE
+                            textSize = 36f
+                        }
+                        drawText(item.first, xOffset + barWidth / 4f, maxBarHeight + 40f, textPaint)
+                        drawText(
+                            item.second.toString(),
+                            xOffset + barWidth / 4f,
+                            maxBarHeight - barHeight - 20f,
+                            textPaint
+                        )
+                    }
+                }
+
+
+            }
+            Text(text = label,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                fontWeight = FontWeight.Bold)
+        }
+
+
+
+}
+
+@Composable
+private fun WeeklyBarChart() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = "Weekly Attendance",
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSecondary,
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            fontWeight = FontWeight.Bold
+        )
         Card(
             colors = CardDefaults.cardColors(
                 MaterialTheme.colorScheme.background
@@ -87,7 +145,8 @@ fun DashboardScreen1() {
             BarChart(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp).padding(20.dp),
+                    .height(200.dp)
+                    .padding(20.dp),
                 data = listOf(
                     "Mon" to 8f,
                     "Tue" to 9f,
@@ -100,8 +159,59 @@ fun DashboardScreen1() {
                 label = "Number of Hours"
             )
         }
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "Today",
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSecondary,
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            fontWeight = FontWeight.Bold
+        )
+        TaskCard("UX Research Audit", "09:30 - 10:30", 0.8f, modifier = Modifier
+            .weight(1f)
+            .padding(5.dp, 8.dp, 5.dp, 8.dp))
+        AttendanceInfoCard(
+            "1",
+            "Leaves Taken",
+            ImageVector.vectorResource(R.drawable.check_out),
+            modifier = Modifier.padding(5.dp, 8.dp, 5.dp, 0.dp)
+        )
 
+        Row {
+            AttendanceInfoCard(
+                "75.58%",
+                "Current Week",
+                ImageVector.vectorResource(R.drawable.calendar_ic),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(5.dp, 8.dp, 5.dp, 0.dp)
+            )
+            AttendanceInfoCard(
+                "95%",
+                "Last Week",
+                ImageVector.vectorResource(R.drawable.calendar_ic),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(5.dp, 8.dp, 5.dp, 0.dp)
+            )
+        }
+    }
+}
 
+@Composable
+private fun MonthlyBarChart() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = "Monthly Attendance",
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSecondary,
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            fontWeight = FontWeight.Bold
+        )
         Card(
             colors = CardDefaults.cardColors(
                 MaterialTheme.colorScheme.background
@@ -111,17 +221,18 @@ fun DashboardScreen1() {
             BarChart(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp).padding(20.dp),
+                    .height(300.dp)
+                    .padding(20.dp),
                 data = listOf(
                     "Jan" to 20f,
                     "Feb" to 15f,
                     "Mar" to 25f,
                     "Apr" to 18f,
                     "May" to 22f,
-                    "June" to 19f,
-                    "July" to 14f,
+                    "Jun" to 19f,
+                    "Jul" to 14f,
                     "Aug" to 21f,
-                    "Sept" to 17f,
+                    "Sep" to 17f,
                     "Oct" to 24f,
                     "Nov" to 28f,
                     "Dec" to 30f
@@ -130,11 +241,32 @@ fun DashboardScreen1() {
                 label = "Number of Days"
             )
         }
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun DashboardScreenPreview() {
-    DashboardScreen1()
+        AttendanceInfoCard(
+            "5",
+            "Leaves Taken",
+            ImageVector.vectorResource(R.drawable.check_out),
+            modifier = Modifier.padding(5.dp, 8.dp, 5.dp, 0.dp)
+        )
+
+
+        Row {
+            AttendanceInfoCard(
+                "50.58%",
+                "Current Month",
+                ImageVector.vectorResource(R.drawable.calendar_ic),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(5.dp, 8.dp, 5.dp, 0.dp)
+            )
+            AttendanceInfoCard(
+                "88%",
+                "Last Month",
+                ImageVector.vectorResource(R.drawable.calendar_ic),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(5.dp, 8.dp, 5.dp, 0.dp)
+            )
+        }
+    }
 }

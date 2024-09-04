@@ -265,7 +265,7 @@ fun AttendanceInfoCard(time: String, label: String, icon: ImageVector, modifier:
                 Text(
                     time,
                     color = MaterialTheme.colorScheme.onSecondary,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
                 )
@@ -302,19 +302,19 @@ fun TaskCard(title: String, time: String, progress: Float, modifier: Modifier) {
             Text(
                 title,
                 color = MaterialTheme.colorScheme.onSecondary,
-                style = MaterialTheme.typography.bodyLarge,
+                style = typography.bodyLarge,
                 maxLines = 1
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 time,
                 color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.bodySmall,
+                style = typography.bodySmall,
                 fontSize = 14.sp
             )
             Spacer(modifier = Modifier.height(16.dp))
             LinearProgressIndicator(
-                progress = progress,
+                progress = { progress },
                 modifier = Modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.primary,
             )
@@ -360,14 +360,14 @@ fun CheckInCard(title: String, time: String, date: String, sideText: String) {
                 Column {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.bodyLarge.copy(
+                        style = typography.bodyLarge.copy(
                             color = MaterialTheme.colorScheme.onSecondary,
                             fontWeight = FontWeight.SemiBold
                         )
                     )
                     Text(
                         text = date,
-                        style = MaterialTheme.typography.bodySmall.copy(
+                        style = typography.bodySmall.copy(
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 14.sp
                         )
@@ -377,7 +377,7 @@ fun CheckInCard(title: String, time: String, date: String, sideText: String) {
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
                         text = time,
-                        style = MaterialTheme.typography.bodyLarge.copy(
+                        style = typography.bodyLarge.copy(
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 20.sp
@@ -386,7 +386,7 @@ fun CheckInCard(title: String, time: String, date: String, sideText: String) {
                     )
                     Text(
                         text = sideText,
-                        style = MaterialTheme.typography.bodySmall.copy(
+                        style = typography.bodySmall.copy(
                             color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 14.sp
                         )

@@ -63,8 +63,8 @@ fun MainScaffoldScreen(
         when (currentScreen) {
             Screen.HomeScreen -> HomeScreen(navController, paddingValues)
             Screen.ScheduleScreen -> ScheduleScreen(navController = navController)
-            Screen.AnalyticsScreen -> AnalyticsScreen(navController = navController)
-            Screen.SettingsScreen -> SettingsScreen(navController)
+            Screen.AnalyticsScreen -> AnalyticsScreen(navController = navController, paddingValues)
+            Screen.SettingsScreen -> SettingsScreen(navController,paddingValues)
             else -> HomeScreen(navController, paddingValues)
         }
     }

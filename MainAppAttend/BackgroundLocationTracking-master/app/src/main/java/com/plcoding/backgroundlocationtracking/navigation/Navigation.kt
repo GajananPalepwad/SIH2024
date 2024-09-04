@@ -1,5 +1,7 @@
 package com.plcoding.backgroundlocationtracking.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -8,6 +10,7 @@ import com.plcoding.backgroundlocationtracking.screens.MainScaffoldScreen
 import com.plcoding.backgroundlocationtracking.screens.SignInScreen
 import com.plcoding.backgroundlocationtracking.screens.SignUpScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navigation(
     navController: NavHostController,
