@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -43,9 +44,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.maps.android.compose.Circle
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.Marker
@@ -68,17 +71,14 @@ fun HomeScreen(navController: NavController, paddingValues: PaddingValues) {
 
             // Attendance Details Section
             AttendanceDetailsSection(MaterialTheme.typography)
-            Spacer(modifier = Modifier.height(16.dp))
 
-            // Map Screen Section
-            MapScreen()  // Call the updated MapScreen
         }
     }
 }
 
 @Composable
 fun MapScreen() {
-    val location = LatLng(40.9971, 29.1007)
+    val location = LatLng(19.113560, 77.288187)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(location, 15f)
     }
@@ -86,31 +86,35 @@ fun MapScreen() {
     val isDarkTheme = isSystemInDarkTheme()
     val mapStyle = if (isDarkTheme) R.raw.map_dark_style else R.raw.map_light_style
 
-    // Set a fixed height for the map to avoid it taking all the space
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)  // Fixed height for the map
-            .padding(16.dp)
+            .height(300.dp)  // Fixed height for the map
+            .padding(vertical = 16.dp, horizontal = 8.dp)
     ) {
         GoogleMap(
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(16.dp))
-                .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(16.dp)),
+                .border(2.dp, MaterialTheme.colorScheme.background, RoundedCornerShape(16.dp)),
             cameraPositionState = cameraPositionState,
             properties = MapProperties(
-                mapStyleOptions = MapStyleOptions.loadRawResourceStyle(LocalContext.current, mapStyle)
+                mapStyleOptions = MapStyleOptions.loadRawResourceStyle(
+                    LocalContext.current, mapStyle
+                )
             )
         ) {
             Marker(state = MarkerState(position = location))
+            Circle(
+                center = location,
+                radius = 200.0,  // Radius in meters
+                strokeColor = MaterialTheme.colorScheme.primary,
+                strokeWidth = 2f,
+                fillColor = MaterialTheme.colorScheme.tertiary
+            )
         }
     }
 }
-
-
-
-
 
 
 @Composable
@@ -133,34 +137,8 @@ fun AttendanceDetailsSection(typography: androidx.compose.material3.Typography) 
 
             // Today Tasks Section
             TodayTasksSection(typography)
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            // Attendances Section
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    "Your Attendances",
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .weight(1f),
-                    fontSize = 16.sp
-                )
-
-                Text(
-                    "See more",
-                    style = typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(8.dp),
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-            CheckInCard("Check In", "07:47", "August 21, 2024", "Early 13 mins")
+            // Map Screen Section
+            MapScreen()  // Call the updated MapScreen
         }
     }
 }
@@ -186,8 +164,7 @@ fun ProfileSection() {
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.weight(1f), verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 "Gajanan Palepwad",
@@ -220,24 +197,17 @@ fun ProfileSection() {
 @Composable
 fun AttendanceSummary() {
     Column(
-        verticalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
+        verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
     ) {
         Row {
             val modifier = Modifier
                 .weight(1f)
                 .padding(5.dp, 8.dp, 5.dp, 0.dp)
             AttendanceInfoCard(
-                "08:46",
-                "Checked In",
-                ImageVector.vectorResource(R.drawable.check_in),
-                modifier
+                "08:46", "Checked In", ImageVector.vectorResource(R.drawable.check_in), modifier
             )
             AttendanceInfoCard(
-                "17:15",
-                "Checked Out",
-                ImageVector.vectorResource(R.drawable.check_out),
-                modifier
+                "17:15", "Checked Out", ImageVector.vectorResource(R.drawable.check_out), modifier
             )
         }
         Row {
@@ -245,10 +215,7 @@ fun AttendanceSummary() {
                 .weight(1f)
                 .padding(5.dp, 10.dp, 5.dp, 0.dp)
             AttendanceInfoCard(
-                "96%",
-                "On Time",
-                ImageVector.vectorResource(R.drawable.tick_ic),
-                modifier
+                "96%", "On Time", ImageVector.vectorResource(R.drawable.tick_ic), modifier
             )
             AttendanceInfoCard(
                 "28 days",
@@ -286,9 +253,7 @@ fun TodayTasksSection(typography: androidx.compose.material3.Typography) {
     }
 
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth()
+        horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
     ) {
         val modifier = Modifier
             .weight(1f)
@@ -303,9 +268,7 @@ fun AttendanceInfoCard(time: String, label: String, icon: ImageVector, modifier:
     Card(
         colors = CardDefaults.cardColors(
             MaterialTheme.colorScheme.background
-        ),
-        shape = RoundedCornerShape(15.dp),
-        modifier = modifier
+        ), shape = RoundedCornerShape(15.dp), modifier = modifier
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -315,8 +278,7 @@ fun AttendanceInfoCard(time: String, label: String, icon: ImageVector, modifier:
                 .fillMaxWidth()
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     time,
@@ -347,13 +309,10 @@ fun TaskCard(title: String, time: String, progress: Float, modifier: Modifier) {
     Card(
         colors = CardDefaults.cardColors(
             MaterialTheme.colorScheme.background
-        ),
-        shape = RoundedCornerShape(15.dp),
-        modifier = modifier
+        ), shape = RoundedCornerShape(15.dp), modifier = modifier
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 title,
@@ -383,9 +342,7 @@ fun CheckInCard(title: String, time: String, date: String, sideText: String) {
     Card(
         colors = CardDefaults.cardColors(
             MaterialTheme.colorScheme.background
-        ),
-        shape = RoundedCornerShape(15.dp),
-        modifier = Modifier.fillMaxWidth()
+        ), shape = RoundedCornerShape(15.dp), modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
@@ -415,36 +372,29 @@ fun CheckInCard(title: String, time: String, date: String, sideText: String) {
             ) {
                 Column {
                     Text(
-                        text = title,
-                        style = typography.bodyLarge.copy(
+                        text = title, style = typography.bodyLarge.copy(
                             color = MaterialTheme.colorScheme.onSecondary,
                             fontWeight = FontWeight.SemiBold
                         )
                     )
                     Text(
-                        text = date,
-                        style = typography.bodySmall.copy(
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 14.sp
+                        text = date, style = typography.bodySmall.copy(
+                            color = MaterialTheme.colorScheme.onBackground, fontSize = 14.sp
                         )
                     )
                 }
 
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
-                        text = time,
-                        style = typography.bodyLarge.copy(
+                        text = time, style = typography.bodyLarge.copy(
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 20.sp
-                        ),
-                        textAlign = TextAlign.Right
+                        ), textAlign = TextAlign.Right
                     )
                     Text(
-                        text = sideText,
-                        style = typography.bodySmall.copy(
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontSize = 14.sp
+                        text = sideText, style = typography.bodySmall.copy(
+                            color = MaterialTheme.colorScheme.onBackground, fontSize = 14.sp
                         )
                     )
                 }
