@@ -12,10 +12,15 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
@@ -66,6 +71,19 @@ fun SignUpScreen(
         val passwordVisible = remember {
             mutableStateOf(false)
         }
+
+        var name by remember {
+            mutableStateOf("")
+        }
+        var employeeId by remember {
+            mutableStateOf("")
+        }
+        var orgName by remember {
+            mutableStateOf("")
+        }
+        var workingPosition by remember {
+            mutableStateOf("")
+        }
         val context = LocalContext.current
 
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -93,6 +111,50 @@ fun SignUpScreen(
                     .padding(12.dp),
                 verticalArrangement = Arrangement.Bottom,
             ) {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("Name") },
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.medium,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 15.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        errorLabelColor = MaterialTheme.colorScheme.error,
+
+                        )
+                )
+                OutlinedTextField(
+                    value = employeeId,
+                    onValueChange = { employeeId = it },
+                    label = { Text("Employee Id") },
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.medium,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 15.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
+                        focusedTextColor = MaterialTheme.colorScheme.secondary,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        errorLabelColor = MaterialTheme.colorScheme.error,
+
+                        )
+                )
 
                 OutlinedTextField(
                     value = mobilenumber,
@@ -115,6 +177,19 @@ fun SignUpScreen(
                         errorLabelColor = MaterialTheme.colorScheme.error,
 
                         )
+                )
+
+                DynamicSelectTextField(
+                    selectedValue = orgName,
+                    options = listOf("SGGSIE&T", "COEP", "IITB","IIM"),
+                    label = "Select Organization",
+                    onValueChangedEvent = { orgName = it },
+                )
+                DynamicSelectTextField(
+                    selectedValue = workingPosition,
+                    options = listOf("HOD", "DEAN", "STUDENT","CLERK"),
+                    label = "Select You Position",
+                    onValueChangedEvent = { workingPosition = it },
                 )
 
                 OutlinedTextField(
@@ -206,6 +281,50 @@ fun SignUpScreen(
                         fontSize = MaterialTheme.typography.titleMedium.fontSize
                     )
                 }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DynamicSelectTextField(
+    selectedValue: String,
+    options: List<String>,
+    label: String,
+    onValueChangedEvent: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
+        modifier = modifier
+    ) {
+        OutlinedTextField(
+            readOnly = true,
+            value = selectedValue,
+            onValueChange = {},
+            label = { Text(text = label) },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+            },
+            colors = OutlinedTextFieldDefaults.colors(),
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth()
+        )
+
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            options.forEach { option: String ->
+                DropdownMenuItem(
+                    text = { Text(text = option) },
+                    onClick = {
+                        expanded = false
+                        onValueChangedEvent(option)
+                    }
+                )
             }
         }
     }
