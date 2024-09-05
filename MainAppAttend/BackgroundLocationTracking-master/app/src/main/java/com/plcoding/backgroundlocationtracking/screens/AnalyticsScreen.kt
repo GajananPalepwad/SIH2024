@@ -98,10 +98,11 @@ fun BarChart(
                         val textPaint = Paint().apply {
                             color = android.graphics.Color.WHITE
                             textSize = 36f
+                            textAlign = Paint.Align.LEFT
                         }
                         drawText(item.first, xOffset + barWidth / 4f, maxBarHeight + 40f, textPaint)
                         drawText(
-                            item.second.toString(),
+                            item.second.toInt().toString(),
                             xOffset + barWidth / 4f,
                             maxBarHeight - barHeight - 20f,
                             textPaint
@@ -126,74 +127,93 @@ fun BarChart(
 private fun WeeklyBarChart() {
     Column(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
+
         Text(
             text = "Weekly Attendance",
-            style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSecondary,
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            fontWeight = FontWeight.Bold
-        )
-        Card(
-            colors = CardDefaults.cardColors(
-                MaterialTheme.colorScheme.background
-            ),
-            shape = RoundedCornerShape(15.dp),
-        ) {
-            BarChart(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .padding(20.dp),
-                data = listOf(
-                    "Mon" to 8f,
-                    "Tue" to 9f,
-                    "Wed" to 7f,
-                    "Thu" to 10f,
-                    "Fri" to 6f,
-                    "Sat" to 8f
-                ),
-                maxValue = 10f,
-                label = "Number of Hours"
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Today",
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSecondary,
-            fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            fontWeight = FontWeight.Bold
-        )
-        TaskCard("UX Research Audit", "09:30 - 10:30", 0.8f, modifier = Modifier
-            .weight(1f)
-            .padding(5.dp, 8.dp, 5.dp, 8.dp))
-        AttendanceInfoCard(
-            "1",
-            "Leaves Taken",
-            ImageVector.vectorResource(R.drawable.check_out),
-            modifier = Modifier.padding(5.dp, 8.dp, 5.dp, 0.dp)
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
         )
 
-        Row {
-            AttendanceInfoCard(
-                "75.58%",
-                "Current Week",
-                ImageVector.vectorResource(R.drawable.calendar_ic),
+        Card(
+            shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp),
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+
+            Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(5.dp, 8.dp, 5.dp, 0.dp)
-            )
-            AttendanceInfoCard(
-                "95%",
-                "Last Week",
-                ImageVector.vectorResource(R.drawable.calendar_ic),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(5.dp, 8.dp, 5.dp, 0.dp)
-            )
+                    .background(MaterialTheme.colorScheme.surface)
+                    .fillMaxSize()
+                    .padding(12.dp)
+            ) {
+
+                Card(
+                    colors = CardDefaults.cardColors(
+                        MaterialTheme.colorScheme.background
+                    ),
+                    shape = RoundedCornerShape(15.dp),
+                    modifier = Modifier.padding(5.dp, 8.dp, 5.dp, 0.dp)
+                ) {
+                    BarChart(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .padding(20.dp),
+                        data = listOf(
+                            "Mon" to 8f,
+                            "Tue" to 9f,
+                            "Wed" to 7f,
+                            "Thu" to 10f,
+                            "Fri" to 6f,
+                            "Sat" to 8f
+                        ),
+                        maxValue = 10f,
+                        label = "Number of Hours"
+                    )
+                }
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(
+                    text = "Today",
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 10.dp)
+                )
+                TaskCard(
+                    "UX Research Audit", "09:30 - 10:30", 0.8f, modifier = Modifier
+                        .weight(1f)
+                        .padding(5.dp, 8.dp, 5.dp, 8.dp)
+                )
+                AttendanceInfoCard(
+                    "1",
+                    "Leaves Taken",
+                    ImageVector.vectorResource(R.drawable.check_out),
+                    modifier = Modifier.padding(5.dp, 8.dp, 5.dp, 8.dp)
+                )
+
+                Row {
+                    AttendanceInfoCard(
+                        "75.58%",
+                        "Current Week",
+                        ImageVector.vectorResource(R.drawable.calendar_ic),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(5.dp, 8.dp, 5.dp, 0.dp)
+                    )
+                    AttendanceInfoCard(
+                        "95%",
+                        "Last Week",
+                        ImageVector.vectorResource(R.drawable.calendar_ic),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(5.dp, 8.dp, 5.dp, 0.dp)
+                    )
+                }
+            }
         }
     }
 }
@@ -202,71 +222,89 @@ private fun WeeklyBarChart() {
 private fun MonthlyBarChart() {
     Column(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
+
         Text(
             text = "Monthly Attendance",
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSecondary,
             fontSize = MaterialTheme.typography.titleLarge.fontSize,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
         )
+
         Card(
-            colors = CardDefaults.cardColors(
-                MaterialTheme.colorScheme.background
-            ),
-            shape = RoundedCornerShape(15.dp),
+            shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp),
+            modifier = Modifier
+                .fillMaxSize()
         ) {
-            BarChart(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp)
-                    .padding(20.dp),
-                data = listOf(
-                    "Jan" to 20f,
-                    "Feb" to 15f,
-                    "Mar" to 25f,
-                    "Apr" to 18f,
-                    "May" to 22f,
-                    "Jun" to 19f,
-                    "Jul" to 14f,
-                    "Aug" to 21f,
-                    "Sep" to 17f,
-                    "Oct" to 24f,
-                    "Nov" to 28f,
-                    "Dec" to 30f
-                ),
-                maxValue = 30f,
-                label = "Number of Days"
-            )
-        }
 
-        AttendanceInfoCard(
-            "5",
-            "Leaves Taken",
-            ImageVector.vectorResource(R.drawable.check_out),
-            modifier = Modifier.padding(5.dp, 8.dp, 5.dp, 0.dp)
-        )
-
-
-        Row {
-            AttendanceInfoCard(
-                "50.58%",
-                "Current Month",
-                ImageVector.vectorResource(R.drawable.calendar_ic),
+            Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(5.dp, 8.dp, 5.dp, 0.dp)
-            )
-            AttendanceInfoCard(
-                "88%",
-                "Last Month",
-                ImageVector.vectorResource(R.drawable.calendar_ic),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(5.dp, 8.dp, 5.dp, 0.dp)
-            )
+                    .background(MaterialTheme.colorScheme.surface)
+                    .fillMaxSize()
+                    .padding(12.dp)
+            ) {
+
+                Card(
+                    colors = CardDefaults.cardColors(
+                        MaterialTheme.colorScheme.background
+                    ),
+                    shape = RoundedCornerShape(15.dp),
+                    modifier = Modifier.padding(5.dp, 8.dp, 5.dp,8.dp)
+                ) {
+                    BarChart(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 20.dp, horizontal = 10.dp)
+                            .height(300.dp)
+                            ,
+                        data = listOf(
+                            "Jan" to 20f,
+                            "Feb" to 15f,
+                            "Mar" to 25f,
+                            "Apr" to 18f,
+                            "May" to 22f,
+                            "Jun" to 19f,
+                            "Jul" to 14f,
+                            "Aug" to 21f,
+                            "Sep" to 17f,
+                            "Oct" to 24f,
+                            "Nov" to 28f,
+                            "Dec" to 30f
+                        ),
+                        maxValue = 31f,
+                        label = "Number of Days"
+                    )
+                }
+
+                AttendanceInfoCard(
+                    "5",
+                    "Leaves Taken",
+                    ImageVector.vectorResource(R.drawable.check_out),
+                    modifier = Modifier.padding(5.dp, 8.dp, 5.dp, 8.dp)
+                )
+
+                Row {
+                    AttendanceInfoCard(
+                        "50.58%",
+                        "Current Month",
+                        ImageVector.vectorResource(R.drawable.calendar_ic),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(5.dp, 8.dp, 5.dp, 0.dp)
+                    )
+                    AttendanceInfoCard(
+                        "88%",
+                        "Last Month",
+                        ImageVector.vectorResource(R.drawable.calendar_ic),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(5.dp, 8.dp, 5.dp, 0.dp)
+                    )
+                }
+            }
         }
     }
 }
