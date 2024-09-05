@@ -1,6 +1,7 @@
 package com.plcoding.backgroundlocationtracking.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -293,14 +294,13 @@ fun DynamicSelectTextField(
     options: List<String>,
     label: String,
     onValueChangedEvent: (String) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
 
+    // Wrapping the dropdown items in a Surface to apply rounded corners
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-        modifier = modifier
+        onExpandedChange = { expanded = !expanded }
     ) {
         OutlinedTextField(
             readOnly = true,
@@ -313,22 +313,32 @@ fun DynamicSelectTextField(
             colors = OutlinedTextFieldDefaults.colors(),
             modifier = Modifier
                 .menuAnchor()
-                .fillMaxWidth()
+                .fillMaxWidth() // Ensures the text field fills the width of its parent
         )
 
-        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        // Rounded dropdown menu
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .fillMaxWidth() // Makes the dropdown as wide as the text field
+                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(17.dp)) // Adds rounded corners
+        ) {
             options.forEach { option: String ->
                 DropdownMenuItem(
                     text = { Text(text = option) },
                     onClick = {
                         expanded = false
                         onValueChangedEvent(option)
-                    }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
                 )
             }
         }
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

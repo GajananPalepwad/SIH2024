@@ -4,7 +4,9 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,8 +17,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -29,7 +33,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -40,25 +43,74 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 import com.plcoding.backgroundlocationtracking.R
 
 @Composable
 fun HomeScreen(navController: NavController, paddingValues: PaddingValues) {
-    val typography = MaterialTheme.typography
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
             .background(MaterialTheme.colorScheme.background),
     ) {
-        // Top Profile Section
-        ProfileSection()
-        Spacer(modifier = Modifier.height(16.dp))
+        item {
+            // Top Profile Section
+            ProfileSection()
+            Spacer(modifier = Modifier.height(16.dp))
 
-        // Attendance Details Section
-        AttendanceDetailsSection(typography)
+            // Attendance Details Section
+            AttendanceDetailsSection(MaterialTheme.typography)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Map Screen Section
+            MapScreen()  // Call the updated MapScreen
+        }
     }
 }
+
+@Composable
+fun MapScreen() {
+    val location = LatLng(40.9971, 29.1007)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(location, 15f)
+    }
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val mapStyle = if (isDarkTheme) R.raw.map_dark_style else R.raw.map_light_style
+
+    // Set a fixed height for the map to avoid it taking all the space
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)  // Fixed height for the map
+            .padding(16.dp)
+    ) {
+        GoogleMap(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(16.dp))
+                .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(16.dp)),
+            cameraPositionState = cameraPositionState,
+            properties = MapProperties(
+                mapStyleOptions = MapStyleOptions.loadRawResourceStyle(LocalContext.current, mapStyle)
+            )
+        ) {
+            Marker(state = MarkerState(position = location))
+        }
+    }
+}
+
+
+
+
 
 
 @Composable
@@ -94,7 +146,9 @@ fun AttendanceDetailsSection(typography: androidx.compose.material3.Typography) 
                     "Your Attendances",
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(8.dp).weight(1f),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .weight(1f),
                     fontSize = 16.sp
                 )
 
@@ -217,7 +271,9 @@ fun TodayTasksSection(typography: androidx.compose.material3.Typography) {
             "Today Tasks",
             color = MaterialTheme.colorScheme.onSecondary,
             fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(8.dp).weight(1f),
+            modifier = Modifier
+                .padding(8.dp)
+                .weight(1f),
             fontSize = 16.sp
         )
         Text(

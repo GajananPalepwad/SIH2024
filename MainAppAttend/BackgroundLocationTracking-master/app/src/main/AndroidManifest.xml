@@ -19,10 +19,11 @@
         android:theme="@style/Theme.BackgroundLocationTracking"
         tools:targetApi="31">
         <service android:name=".locationClasses.LocationService" android:foregroundServiceType="location" />
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBwS_OR9GoWNBfSp1NCrT9vXQ1chMsk56A"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.BackgroundLocationTracking">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
