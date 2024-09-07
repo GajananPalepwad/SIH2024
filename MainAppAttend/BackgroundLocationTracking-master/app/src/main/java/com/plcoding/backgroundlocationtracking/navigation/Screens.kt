@@ -9,8 +9,8 @@ enum class Screen(var route: String) {
     AttendanceScreen("attendence_screen"),
     SignInScreen("sign_in_screen"),
     SignUpScreen("sign_up_screen"),
-    ProfileScreen("profile_screen"),
-    MainScaffoldScreen("main_scaffold_screen"),
+    UserDetailsEditScreen("user_details_edit_screen"),
+    MainScaffoldScreen("main_scaffold_screen")
 
 
 }

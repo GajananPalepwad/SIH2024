@@ -70,7 +70,7 @@ fun HomeScreen(navController: NavController, paddingValues: PaddingValues) {
             Spacer(modifier = Modifier.height(16.dp))
 
             // Attendance Details Section
-            AttendanceDetailsSection(MaterialTheme.typography)
+            AttendanceDetailsSection(typography)
 
         }
     }

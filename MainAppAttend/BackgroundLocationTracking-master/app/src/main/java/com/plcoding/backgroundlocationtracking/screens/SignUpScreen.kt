@@ -1,7 +1,6 @@
 package com.plcoding.backgroundlocationtracking.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,15 +12,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
@@ -45,6 +39,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.plcoding.backgroundlocationtracking.R
+import com.plcoding.backgroundlocationtracking.components.AppTextField
+import com.plcoding.backgroundlocationtracking.components.DropDownMenu
 import com.plcoding.backgroundlocationtracking.navigation.Screen
 
 @Composable
@@ -85,7 +81,12 @@ fun SignUpScreen(
         var workingPosition by remember {
             mutableStateOf("")
         }
-        val context = LocalContext.current
+
+
+
+        val organizations = listOf("Organization 1", "Organization 2", "Organization 3")
+        val positions = listOf("Position 1", "Position 2", "Position 3")
+
 
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
@@ -112,112 +113,47 @@ fun SignUpScreen(
                     .padding(12.dp),
                 verticalArrangement = Arrangement.Bottom,
             ) {
-                OutlinedTextField(
+
+                AppTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("Name") },
-                    singleLine = true,
-                    shape = MaterialTheme.shapes.medium,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 15.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-                        focusedTextColor = MaterialTheme.colorScheme.secondary,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                        errorLabelColor = MaterialTheme.colorScheme.error,
-
-                        )
+                    label = "Name",
+                    keyboardType = KeyboardType.Text
                 )
-                OutlinedTextField(
+
+                AppTextField(
                     value = employeeId,
                     onValueChange = { employeeId = it },
-                    label = { Text("Employee Id") },
-                    singleLine = true,
-                    shape = MaterialTheme.shapes.medium,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 15.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-                        focusedTextColor = MaterialTheme.colorScheme.secondary,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                        errorLabelColor = MaterialTheme.colorScheme.error,
-
-                        )
+                    label = "Employee Id",
+                    keyboardType = KeyboardType.Text
                 )
-
-                OutlinedTextField(
+                AppTextField(
                     value = mobilenumber,
                     onValueChange = { mobilenumber = it },
-                    label = { Text("Mobile Number") },
-                    singleLine = true,
-                    shape = MaterialTheme.shapes.medium,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 15.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-                        focusedTextColor = MaterialTheme.colorScheme.secondary,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                        errorLabelColor = MaterialTheme.colorScheme.error,
-
-                        )
+                    label = " Mobile Number",
+                    keyboardType = KeyboardType.Number
                 )
 
-                DynamicSelectTextField(
+                DropDownMenu(
                     selectedValue = orgName,
-                    options = listOf("SGGSIE&T", "COEP", "IITB","IIM"),
+                    options = organizations,
                     label = "Select Organization",
                     onValueChangedEvent = { orgName = it },
                 )
-                DynamicSelectTextField(
+                DropDownMenu(
                     selectedValue = workingPosition,
-                    options = listOf("HOD", "DEAN", "STUDENT","CLERK"),
+                    options = positions,
                     label = "Select You Position",
                     onValueChangedEvent = { workingPosition = it },
                 )
 
-                OutlinedTextField(
+                AppTextField(
                     value = email,
-                    onValueChange = { email = it.trim() },
-                    label = { Text("Email") },
-                    singleLine = true,
-                    shape = MaterialTheme.shapes.medium,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Email
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 15.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        focusedLabelColor = MaterialTheme.colorScheme.secondary,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-                        focusedTextColor = MaterialTheme.colorScheme.secondary,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                        errorLabelColor = MaterialTheme.colorScheme.error,
+                    onValueChange = { email = it },
+                    label = "Email",
+                    keyboardType = KeyboardType.Email)
 
-                        )
-                )
-
-
-
+                //Special Text field for password
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it.trim() },
@@ -282,58 +218,6 @@ fun SignUpScreen(
                         fontSize = MaterialTheme.typography.titleMedium.fontSize
                     )
                 }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DynamicSelectTextField(
-    selectedValue: String,
-    options: List<String>,
-    label: String,
-    onValueChangedEvent: (String) -> Unit,
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    // Wrapping the dropdown items in a Surface to apply rounded corners
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded }
-    ) {
-        OutlinedTextField(
-            readOnly = true,
-            value = selectedValue,
-            onValueChange = {},
-            label = { Text(text = label) },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-            },
-            colors = OutlinedTextFieldDefaults.colors(),
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth() // Ensures the text field fills the width of its parent
-        )
-
-        // Rounded dropdown menu
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .fillMaxWidth() // Makes the dropdown as wide as the text field
-                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(17.dp)) // Adds rounded corners
-        ) {
-            options.forEach { option: String ->
-                DropdownMenuItem(
-                    text = { Text(text = option) },
-                    onClick = {
-                        expanded = false
-                        onValueChangedEvent(option)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
             }
         }
     }

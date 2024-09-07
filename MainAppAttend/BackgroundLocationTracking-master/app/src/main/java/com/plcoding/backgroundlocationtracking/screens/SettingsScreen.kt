@@ -3,6 +3,7 @@ package com.plcoding.backgroundlocationtracking.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -36,10 +37,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.plcoding.backgroundlocationtracking.R
+import com.plcoding.backgroundlocationtracking.navigation.Screen
 
 
 @Composable
-fun SettingsScreen(navController: NavController, paddingValues: PaddingValues){
+fun SettingsScreen(navController: NavController, paddingValues: PaddingValues) {
 
     Column(
         modifier = Modifier
@@ -90,19 +92,41 @@ fun SettingsScreen(navController: NavController, paddingValues: PaddingValues){
                 verticalArrangement = Arrangement.Top,
             ) {
 
-                SettingItem("User Details", painterResource(id = R.drawable.baseline_manage_accounts_24))
-                SettingItem("Settings", painterResource(id = R.drawable.settings_ic))
-                SettingItem("About Us", painterResource(id = R.drawable.baseline_info_outline_24 ))
-                Column (modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surface)
-                    .fillMaxSize()
-                    .padding(12.dp),
-                    verticalArrangement = Arrangement.Bottom){
-                    IconButton(onClick = { /*TODO*/ },
-                        modifier = Modifier.fillMaxWidth()) {
+                SettingItem("User Details",
+                    painterResource(id = R.drawable.baseline_manage_accounts_24)
+                ) {
+                    navController.navigate(Screen.UserDetailsEditScreen.route)
+                }
+                SettingItem("Settings",
+                    painterResource(id = R.drawable.settings_ic)
+                ) {
+                    //TODO
+                }
+
+                SettingItem(
+                    "About Us",
+                    painterResource(id = R.drawable.baseline_info_outline_24)
+                ) {
+                    //TODO
+                }
+                Column(
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.surface)
+                        .fillMaxSize()
+                        .padding(12.dp),
+                    verticalArrangement = Arrangement.Bottom
+                ) {
+                    IconButton(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
 
                         Row {
-                            Icon(painter = painterResource(id = R.drawable.baseline_logout_24 ), contentDescription ="Logout", tint = MaterialTheme.colorScheme.onSecondary )
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_logout_24),
+                                contentDescription = "Logout",
+                                tint = MaterialTheme.colorScheme.onSecondary
+                            )
                             Text(
                                 text = "Logout",
                                 style = typography.bodyLarge.copy(
@@ -122,7 +146,7 @@ fun SettingsScreen(navController: NavController, paddingValues: PaddingValues){
 }
 
 @Composable
-fun SettingItem(title: String, painter: Painter) {
+fun SettingItem(title: String, painter: Painter, onClick: () -> Unit) {
     Card(
         colors = CardDefaults.cardColors(
             MaterialTheme.colorScheme.background
@@ -131,6 +155,9 @@ fun SettingItem(title: String, painter: Painter) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 10.dp)
+            .clickable {
+                onClick()
+            }
     ) {
         Row(
             modifier = Modifier
@@ -174,6 +201,9 @@ fun SettingItem(title: String, painter: Painter) {
 
 @Preview(showBackground = true)
 @Composable
-fun SettingsScreenPreview(){
-    SettingsScreen(navController = NavController(LocalContext.current), paddingValues = PaddingValues())
+fun SettingsScreenPreview() {
+    SettingsScreen(
+        navController = NavController(LocalContext.current),
+        paddingValues = PaddingValues()
+    )
 }
