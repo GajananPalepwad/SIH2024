@@ -96,7 +96,7 @@ fun BarChart(
                     // Draw text labels
                     drawContext.canvas.nativeCanvas.apply {
                         val textPaint = Paint().apply {
-                            color = android.graphics.Color.WHITE
+                            color = android.graphics.Color.GRAY
                             textSize = 36f
                             textAlign = Paint.Align.LEFT
                         }

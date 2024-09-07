@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
@@ -57,14 +59,18 @@ fun EditUserDetailsScreen(navController: NavController) {
     val employeeID = "None"
     val workingPosition = "None"
 
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface),
+            .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(scrollState),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        Spacer(modifier = Modifier.height(40.dp))
         // Profile Image with Edit Icon
         ProfileImage()
         Spacer(modifier = Modifier.height(40.dp))
@@ -72,13 +78,12 @@ fun EditUserDetailsScreen(navController: NavController) {
             shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(10.dp),
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(12.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -115,7 +120,8 @@ fun ProfileImage() {
             modifier = Modifier
                 .size(150.dp)
                 .clip(CircleShape)
-                .border(3.dp, MaterialTheme.colorScheme.onSecondary, CircleShape),
+                .border(3.dp, MaterialTheme.colorScheme.onSecondary, CircleShape)
+                .padding(8.dp),
             contentAlignment = Alignment.Center
         ) {
             Image(
@@ -136,12 +142,12 @@ fun ProfileImage() {
                 .offset(x = (-5).dp, y = (-5).dp)
                 .align(Alignment.BottomEnd)
                 .clip(CircleShape),
-            colors = IconButtonDefaults.iconButtonColors(MaterialTheme.colorScheme.background)
+            colors = IconButtonDefaults.iconButtonColors(MaterialTheme.colorScheme.primary)
         ) {
             Icon(
                 imageVector = Icons.Default.Edit,
                 contentDescription = "Change Profile Photo",
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(5.dp),
                 tint = MaterialTheme.colorScheme.onSecondary
             )
         }
