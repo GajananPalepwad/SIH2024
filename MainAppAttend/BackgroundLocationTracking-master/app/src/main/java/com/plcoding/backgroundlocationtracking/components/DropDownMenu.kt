@@ -2,6 +2,7 @@ package com.plcoding.backgroundlocationtracking.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,10 +43,12 @@ fun DropDownMenu(
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
+            shape = MaterialTheme.shapes.medium,
             colors = OutlinedTextFieldDefaults.colors(),
             modifier = Modifier
                 .menuAnchor()
-                .fillMaxWidth() // Ensures the text field fills the width of its parent
+                .fillMaxWidth()
+                .padding(bottom = 15.dp),
         )
 
         // Rounded dropdown menu

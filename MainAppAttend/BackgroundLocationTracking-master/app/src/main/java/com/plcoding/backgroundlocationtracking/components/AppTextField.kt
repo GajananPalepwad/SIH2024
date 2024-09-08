@@ -38,7 +38,6 @@ fun AppTextField(
             focusedTextColor = MaterialTheme.colorScheme.secondary,
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
             errorLabelColor = MaterialTheme.colorScheme.error,
-
             )
     )
 }
