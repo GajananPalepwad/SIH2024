@@ -2,10 +2,12 @@ package com.plcoding.backgroundlocationtracking.models.request
 
 data class EmployeeRegistration(
     val Name: String,
-    val Employee_ID: String,
-    val Contact_No: String,
+    val EmployeeId: String,
+    val MobileNumber: String,
     val Organization: String,
     val Position: String,
     val Email: String,
-    val Password: String
+    val Password: String,
+    val Org_Id: Int,
+    val Office_Id: Int
 )

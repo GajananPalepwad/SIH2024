@@ -1,6 +1,7 @@
 package com.plcoding.backgroundlocationtracking.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -59,7 +60,12 @@ fun DropDownMenu(
                 .fillMaxWidth() // Makes the dropdown as wide as the text field
                 .background(
                     MaterialTheme.colorScheme.surface,
-                    RoundedCornerShape(17.dp)
+                    RoundedCornerShape(15.dp)
+                )
+                .border(
+                    2.dp,
+                    MaterialTheme.colorScheme.primary,
+                    RoundedCornerShape(15.dp)
                 ) // Adds rounded corners
         ) {
             options.forEach { option: String ->

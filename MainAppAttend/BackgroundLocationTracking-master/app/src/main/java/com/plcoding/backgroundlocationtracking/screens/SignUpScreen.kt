@@ -51,6 +51,7 @@ import com.plcoding.backgroundlocationtracking.components.AppTextField
 import com.plcoding.backgroundlocationtracking.components.DropDownMenu
 import com.plcoding.backgroundlocationtracking.models.request.EmployeeRegistration
 import com.plcoding.backgroundlocationtracking.models.response.ApiResponse
+import com.plcoding.backgroundlocationtracking.models.response.OrganisationListResponse
 import com.plcoding.backgroundlocationtracking.navigation.Screen
 import retrofit2.Call
 import retrofit2.Callback
@@ -98,14 +99,20 @@ fun SignUpScreen(
         var orgName by remember {
             mutableStateOf("")
         }
+        var offName by remember {
+            mutableStateOf("")
+        }
         var workingPosition by remember {
             mutableStateOf("")
         }
 
 
 
-        val organizations = listOf("Organization 1", "Organization 2", "Organization 3")
+        val organizations = mutableListOf<String>()
+        val offices = listOf("Office 1", "Office 2", "Office 3")
         val positions = listOf("Position 1", "Position 2", "Position 3")
+
+        getOrganisationList(organizations, apiService, context)
 
 
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -160,6 +167,14 @@ fun SignUpScreen(
                     label = "Select Organization",
                     onValueChangedEvent = { orgName = it },
                 )
+
+                DropDownMenu(
+                    selectedValue = offName,
+                    options = offices,
+                    label = "Select Office",
+                    onValueChangedEvent = { offName = it },
+                )
+
                 DropDownMenu(
                     selectedValue = workingPosition,
                     options = positions,
@@ -218,12 +233,14 @@ fun SignUpScreen(
                             // Create an employee object
                         val employee = EmployeeRegistration(
                             Name = name.trim(),
-                            Employee_ID = employeeId.trim(),
-                            Contact_No = mobilenumber.trim(),
+                            EmployeeId = employeeId.trim(),
+                            MobileNumber = mobilenumber.trim(),
                             Organization = orgName.trim(),
                             Position = workingPosition.trim(),
                             Email = email.trim(),
-                            Password = password.trim()
+                            Password = password.trim(),
+                            Org_Id = 1,
+                            Office_Id = 1
                             )
 
                         registerEmployee(employee, apiService, context, navController)
@@ -276,6 +293,31 @@ private fun registerEmployee(employee: EmployeeRegistration, apiService: ApiServ
         }
 
         override fun onFailure(call: Call<ApiResponse?>, t: Throwable) {
+            Log.d("Reg", "Network Error: ${t.message}")
+            Toast.makeText(context, "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
+        }
+    })
+}
+
+private fun getOrganisationList(organizations: MutableList<String>, apiService: ApiService?, context: Context) {
+    apiService?.getOrganisationList()?.enqueue(object : Callback<OrganisationListResponse?> {
+        override fun onResponse(call: Call<OrganisationListResponse?>, response: Response<OrganisationListResponse?>) {
+            if (response.isSuccessful) {
+                val userResponse = response.body()
+                if (userResponse?.status == "success") {
+
+                    for (item in userResponse.data) {
+                        organizations.add(item.org_name)
+                    }
+                }
+
+            } else {
+                Log.d("Reg", "Registration failed: ${response.message()}")
+                Toast.makeText(context, "Registration failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onFailure(call: Call<OrganisationListResponse?>, t: Throwable) {
             Log.d("Reg", "Network Error: ${t.message}")
             Toast.makeText(context, "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
         }
