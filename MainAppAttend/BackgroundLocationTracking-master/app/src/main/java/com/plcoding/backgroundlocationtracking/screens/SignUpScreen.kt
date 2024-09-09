@@ -26,6 +26,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -51,12 +52,16 @@ import com.plcoding.backgroundlocationtracking.components.AppTextField
 import com.plcoding.backgroundlocationtracking.components.DropDownMenu
 import com.plcoding.backgroundlocationtracking.models.request.EmployeeRegistration
 import com.plcoding.backgroundlocationtracking.models.response.ApiResponse
+import com.plcoding.backgroundlocationtracking.models.response.EmployeePositionListResponse
+import com.plcoding.backgroundlocationtracking.models.response.OfficeListResponse
+import com.plcoding.backgroundlocationtracking.models.response.OrganisationData
 import com.plcoding.backgroundlocationtracking.models.response.OrganisationListResponse
 import com.plcoding.backgroundlocationtracking.navigation.Screen
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+var organisationListResponse = mutableListOf<OrganisationData>()
 
 @Composable
 fun SignUpScreen(
@@ -99,20 +104,26 @@ fun SignUpScreen(
         var orgName by remember {
             mutableStateOf("")
         }
+        var selectedOrgIndex by remember { mutableIntStateOf(-1) }
+
+
         var offName by remember {
             mutableStateOf("")
         }
+        var selectedOfficeIndex by remember { mutableIntStateOf(-1) }
+
         var workingPosition by remember {
             mutableStateOf("")
         }
-
+        var selectedPositionIndex by remember { mutableIntStateOf(-1) }
 
 
         val organizations = mutableListOf<String>()
-        val offices = listOf("Office 1", "Office 2", "Office 3")
-        val positions = listOf("Position 1", "Position 2", "Position 3")
+        val offices = mutableListOf<String>()
+        val positions = mutableListOf<String>()
 
         getOrganisationList(organizations, apiService, context)
+
 
 
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -165,28 +176,50 @@ fun SignUpScreen(
                     selectedValue = orgName,
                     options = organizations,
                     label = "Select Organization",
-                    onValueChangedEvent = { orgName = it },
+                    onValueChangedEvent = { selectedValue, Index ->
+                        orgName = selectedValue
+                        selectedOrgIndex = Index
+                        getOfficeList(
+                            offices,
+                            apiService,
+                            context,
+                            organisationListResponse[selectedOrgIndex].org_id
+                        )
+                    },
                 )
 
                 DropDownMenu(
                     selectedValue = offName,
                     options = offices,
                     label = "Select Office",
-                    onValueChangedEvent = { offName = it },
+                    onValueChangedEvent = { selectedValue, Index ->
+                        offName = selectedValue
+                        selectedOfficeIndex = Index
+                        getEmployeePositionList(
+                            positions,
+                            apiService,
+                            context,
+                            organisationListResponse[selectedOrgIndex].org_id
+                        )
+                    },
                 )
 
                 DropDownMenu(
                     selectedValue = workingPosition,
                     options = positions,
                     label = "Select You Position",
-                    onValueChangedEvent = { workingPosition = it },
+                    onValueChangedEvent = { selectedValue, Index ->
+                        workingPosition = selectedValue
+                        selectedPositionIndex = Index
+                    },
                 )
 
                 AppTextField(
                     value = email,
                     onValueChange = { email = it },
                     label = "Email",
-                    keyboardType = KeyboardType.Email)
+                    keyboardType = KeyboardType.Email
+                )
 
                 //Special Text field for password
                 OutlinedTextField(
@@ -230,7 +263,7 @@ fun SignUpScreen(
 
 
                     onClick = {
-                            // Create an employee object
+                        // Create an employee object
                         val employee = EmployeeRegistration(
                             Name = name.trim(),
                             EmployeeId = employeeId.trim(),
@@ -241,7 +274,7 @@ fun SignUpScreen(
                             Password = password.trim(),
                             Org_Id = 1,
                             Office_Id = 1
-                            )
+                        )
 
                         registerEmployee(employee, apiService, context, navController)
 
@@ -271,7 +304,12 @@ fun SignUpScreen(
     }
 }
 
-private fun registerEmployee(employee: EmployeeRegistration, apiService: ApiService?, context: Context, navController: NavController) {
+private fun registerEmployee(
+    employee: EmployeeRegistration,
+    apiService: ApiService?,
+    context: Context,
+    navController: NavController
+) {
     apiService?.employeeRegister(employee)?.enqueue(object : Callback<ApiResponse?> {
         override fun onResponse(call: Call<ApiResponse?>, response: Response<ApiResponse?>) {
             if (response.isSuccessful) {
@@ -288,7 +326,11 @@ private fun registerEmployee(employee: EmployeeRegistration, apiService: ApiServ
 
             } else {
                 Log.d("Reg", "Registration failed: ${response.message()}")
-                Toast.makeText(context, "Registration failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Registration failed: ${response.message()}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -299,11 +341,19 @@ private fun registerEmployee(employee: EmployeeRegistration, apiService: ApiServ
     })
 }
 
-private fun getOrganisationList(organizations: MutableList<String>, apiService: ApiService?, context: Context) {
+private fun getOrganisationList(
+    organizations: MutableList<String>,
+    apiService: ApiService?,
+    context: Context
+) {
     apiService?.getOrganisationList()?.enqueue(object : Callback<OrganisationListResponse?> {
-        override fun onResponse(call: Call<OrganisationListResponse?>, response: Response<OrganisationListResponse?>) {
+        override fun onResponse(
+            call: Call<OrganisationListResponse?>,
+            response: Response<OrganisationListResponse?>
+        ) {
             if (response.isSuccessful) {
                 val userResponse = response.body()
+                organisationListResponse = userResponse?.data as MutableList<OrganisationData>
                 if (userResponse?.status == "success") {
 
                     for (item in userResponse.data) {
@@ -313,7 +363,11 @@ private fun getOrganisationList(organizations: MutableList<String>, apiService: 
 
             } else {
                 Log.d("Reg", "Registration failed: ${response.message()}")
-                Toast.makeText(context, "Registration failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Registration failed: ${response.message()}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -322,6 +376,83 @@ private fun getOrganisationList(organizations: MutableList<String>, apiService: 
             Toast.makeText(context, "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
         }
     })
+}
+
+private fun getOfficeList(
+    offices: MutableList<String>,
+    apiService: ApiService?,
+    context: Context,
+    orgId: Int
+) {
+
+    apiService?.getOfficeList(orgId)?.enqueue(object : Callback<OfficeListResponse?> {
+        override fun onResponse(
+            call: Call<OfficeListResponse?>,
+            response: Response<OfficeListResponse?>
+        ) {
+            if (response.isSuccessful) {
+                val userResponse = response.body()
+                if (userResponse?.status == "success") {
+
+                    for (item in userResponse.data) {
+                        offices.add(item.office_name)
+                    }
+                }
+
+            } else {
+                Log.d("Reg", "Registration failed: ${response.message()}")
+                Toast.makeText(
+                    context,
+                    "Registration failed: ${response.message()}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        override fun onFailure(call: Call<OfficeListResponse?>, t: Throwable) {
+            Log.d("Reg", "Network Error: ${t.message}")
+            Toast.makeText(context, "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
+        }
+    })
+}
+
+private fun getEmployeePositionList(
+    positions: MutableList<String>,
+    apiService: ApiService?,
+    context: Context,
+    officeId: Int
+) {
+
+    apiService?.getPositionList(officeId)
+        ?.enqueue(object : Callback<EmployeePositionListResponse?> {
+            override fun onResponse(
+                call: Call<EmployeePositionListResponse?>,
+                response: Response<EmployeePositionListResponse?>
+            ) {
+                if (response.isSuccessful) {
+                    val userResponse = response.body()
+                    if (userResponse?.status == "success") {
+
+                        for (item in userResponse.data) {
+                            positions.add(item.position_name)
+                        }
+                    }
+
+                } else {
+                    Log.d("Reg", "Registration failed: ${response.message()}")
+                    Toast.makeText(
+                        context,
+                        "Registration failed: ${response.message()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<EmployeePositionListResponse?>, t: Throwable) {
+                Log.d("Reg", "Network Error: ${t.message}")
+                Toast.makeText(context, "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
 }
 
 

@@ -19,12 +19,6 @@
       <SelectionState runConfigName="AttendanceScreenPreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="MainAppAttend.BackgroundLocationTracking-master.BackgroundLocationTracking.app">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="SIH2024.MainAppAttend.BackgroundLocationTracking-master.BackgroundLocationTracking.app">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
     </selectionStates>
   </component>
 </project>

@@ -27,11 +27,10 @@ fun DropDownMenu(
     selectedValue: String,
     options: List<String>,
     label: String,
-    onValueChangedEvent: (String) -> Unit,
+    onValueChangedEvent: (String, Int) -> Unit, // Updated to pass the selected value and index
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    // Wrapping the dropdown items in a Surface to apply rounded corners
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
@@ -52,12 +51,11 @@ fun DropDownMenu(
                 .padding(bottom = 15.dp),
         )
 
-        // Rounded dropdown menu
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .fillMaxWidth() // Makes the dropdown as wide as the text field
+                .fillMaxWidth()
                 .background(
                     MaterialTheme.colorScheme.surface,
                     RoundedCornerShape(15.dp)
@@ -66,14 +64,14 @@ fun DropDownMenu(
                     2.dp,
                     MaterialTheme.colorScheme.primary,
                     RoundedCornerShape(15.dp)
-                ) // Adds rounded corners
+                )
         ) {
-            options.forEach { option: String ->
+            options.forEachIndexed { index, option ->
                 DropdownMenuItem(
                     text = { Text(text = option) },
                     onClick = {
                         expanded = false
-                        onValueChangedEvent(option)
+                        onValueChangedEvent(option, index) // Pass both value and index
                     },
                     modifier = Modifier
                         .fillMaxWidth()
