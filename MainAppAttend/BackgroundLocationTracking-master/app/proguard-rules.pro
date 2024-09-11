@@ -19,8 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--keep class com.plcoding.backgroundlocationtracking.models.response.*{*;}
--keep class com.plcoding.backgroundlocationtracking.models.request.*{*;}
+-keep class com.plcoding.backgroundlocationtracking.apimodels.response.*{*;}
+-keep class com.plcoding.backgroundlocationtracking.apimodels.request.*{*;}
 -dontwarn javax.servlet.ServletContainerInitializer
 -dontwarn org.bouncycastle.jsse.BCSSLParameters
 -dontwarn org.bouncycastle.jsse.BCSSLSocket

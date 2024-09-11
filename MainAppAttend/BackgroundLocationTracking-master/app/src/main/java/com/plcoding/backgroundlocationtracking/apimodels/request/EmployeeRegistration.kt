@@ -1,4 +1,4 @@
-package com.plcoding.backgroundlocationtracking.models.request
+package com.plcoding.backgroundlocationtracking.apimodels.request
 
 data class EmployeeRegistration(
     val Name: String,

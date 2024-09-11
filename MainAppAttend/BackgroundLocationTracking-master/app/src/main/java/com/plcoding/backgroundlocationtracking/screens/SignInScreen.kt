@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -33,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -45,18 +43,21 @@ import androidx.navigation.NavController
 import com.plcoding.backgroundlocationtracking.R
 import com.plcoding.backgroundlocationtracking.api.ApiService
 import com.plcoding.backgroundlocationtracking.api.RetrofitClient
-import com.plcoding.backgroundlocationtracking.models.request.EmployeeLogin
-import com.plcoding.backgroundlocationtracking.models.request.EmployeeRegistration
-import com.plcoding.backgroundlocationtracking.models.response.ApiResponse
+import com.plcoding.backgroundlocationtracking.apimodels.request.EmployeeLogin
+import com.plcoding.backgroundlocationtracking.apimodels.response.EmployeeSignInResponse
+import com.plcoding.backgroundlocationtracking.data.PreferenceHelper
 import com.plcoding.backgroundlocationtracking.navigation.Screen
-import okhttp3.Callback
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 @Composable
 fun SignInScreen(
     navController: NavController
 ) {
+    // Sign In Screen
+    val context = LocalContext.current
+    val preferenceHelper = PreferenceHelper(context)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +74,7 @@ fun SignInScreen(
         }
         val context = LocalContext.current
 
-        val BASE_URL = "https://sggsapp.co.in/sih/"//context.getString(R.string.base_url)
+        val BASE_URL = context.getString(R.string.base_url)
         val retrofit = RetrofitClient.getClient(BASE_URL)
         val apiService = retrofit?.create(ApiService::class.java)
 
@@ -179,7 +180,8 @@ fun SignInScreen(
                                     email, password
                                 ), navController = navController,
                                 context = context,
-                                apiService = apiService
+                                apiService = apiService,
+                                preferenceHelper = preferenceHelper
                             )
                         }
 
@@ -214,17 +216,28 @@ private fun signInEmployee(
     employee: EmployeeLogin,
     apiService: ApiService?,
     context: Context,
-    navController: NavController
+    navController: NavController,
+    preferenceHelper: PreferenceHelper
 ) {
-    apiService?.employeeLogin(employee)?.enqueue(object : retrofit2.Callback<ApiResponse> {
-        override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+    apiService?.employeeLogin(employee)?.enqueue(object : Callback<EmployeeSignInResponse> {
+        override fun onResponse(call: Call<EmployeeSignInResponse>, response: Response<EmployeeSignInResponse>) {
             if (response.isSuccessful) {
                 val userResponse = response.body()
 
-
                 if (userResponse?.status == "success") {
+
+                    // Store user data in preferences
+                    preferenceHelper.userId = userResponse.user.user_id
+                    preferenceHelper.name = userResponse.user.name
+                    preferenceHelper.email = userResponse.user.email
+                    preferenceHelper.mobileNumber = userResponse.user.mobile_number
+                    preferenceHelper.orgId = userResponse.user.org_id
+                    preferenceHelper.officeId = userResponse.user.office_id
+                    preferenceHelper.position = userResponse.user.position
+                    preferenceHelper.approved = userResponse.user.approved
+
                     navController.navigate(Screen.MainScaffoldScreen.route)
-                }else if(userResponse?.status == "error"){
+                } else if (userResponse?.status == "error") {
                     Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
                 }
 
@@ -234,7 +247,7 @@ private fun signInEmployee(
             }
         }
 
-        override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+        override fun onFailure(call: Call<EmployeeSignInResponse>, t: Throwable) {
             Log.d("SignIn", "Network Error: ${t.message}")
             Toast.makeText(context, "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
         }

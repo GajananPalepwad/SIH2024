@@ -1,11 +1,12 @@
 package com.plcoding.backgroundlocationtracking.api
 
-import com.plcoding.backgroundlocationtracking.models.request.EmployeeLogin
-import com.plcoding.backgroundlocationtracking.models.request.EmployeeRegistration
-import com.plcoding.backgroundlocationtracking.models.response.ApiResponse
-import com.plcoding.backgroundlocationtracking.models.response.EmployeePositionListResponse
-import com.plcoding.backgroundlocationtracking.models.response.OfficeListResponse
-import com.plcoding.backgroundlocationtracking.models.response.OrganisationListResponse
+import com.plcoding.backgroundlocationtracking.apimodels.request.EmployeeLogin
+import com.plcoding.backgroundlocationtracking.apimodels.request.EmployeeRegistration
+import com.plcoding.backgroundlocationtracking.apimodels.response.ApiResponse
+import com.plcoding.backgroundlocationtracking.apimodels.response.EmployeePositionListResponse
+import com.plcoding.backgroundlocationtracking.apimodels.response.EmployeeSignInResponse
+import com.plcoding.backgroundlocationtracking.apimodels.response.OfficeListResponse
+import com.plcoding.backgroundlocationtracking.apimodels.response.OrganisationListResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -27,6 +28,6 @@ interface ApiService {
     fun getPositionList(@Query ("office_id") office_id:Int):Call<EmployeePositionListResponse>
 
     @POST("employee_login.php")
-    fun employeeLogin(@Body user: EmployeeLogin):Call<ApiResponse>
+    fun employeeLogin(@Body user: EmployeeLogin):Call<EmployeeSignInResponse>
 
 }

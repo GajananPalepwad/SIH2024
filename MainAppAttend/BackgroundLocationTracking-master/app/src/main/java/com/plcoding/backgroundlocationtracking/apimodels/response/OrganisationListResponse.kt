@@ -1,4 +1,4 @@
-package com.plcoding.backgroundlocationtracking.models.response
+package com.plcoding.backgroundlocationtracking.apimodels.response
 
 data class OrganisationListResponse(
     val status: String,

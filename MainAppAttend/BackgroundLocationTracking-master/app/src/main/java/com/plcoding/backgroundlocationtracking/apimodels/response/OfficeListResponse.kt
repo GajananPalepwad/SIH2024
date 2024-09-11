@@ -1,4 +1,4 @@
-package com.plcoding.backgroundlocationtracking.models.response
+package com.plcoding.backgroundlocationtracking.apimodels.response
 
 data class OfficeListResponse(
     val status: String,

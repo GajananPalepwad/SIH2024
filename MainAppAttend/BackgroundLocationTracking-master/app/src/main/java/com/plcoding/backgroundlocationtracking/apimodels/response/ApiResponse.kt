@@ -1,4 +1,4 @@
-package com.plcoding.backgroundlocationtracking.models.response
+package com.plcoding.backgroundlocationtracking.apimodels.response
 
 import kotlinx.serialization.Serializable
 

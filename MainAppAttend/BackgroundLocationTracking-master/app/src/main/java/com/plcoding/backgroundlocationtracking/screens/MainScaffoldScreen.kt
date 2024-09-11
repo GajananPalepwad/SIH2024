@@ -2,6 +2,7 @@ package com.plcoding.backgroundlocationtracking.screens
 
 import android.app.Activity
 import android.os.Build
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -42,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.plcoding.backgroundlocationtracking.R
 import com.plcoding.backgroundlocationtracking.components.AppBottomBar
+import com.plcoding.backgroundlocationtracking.data.PreferenceHelper
 import com.plcoding.backgroundlocationtracking.navigation.Screen
 import com.plcoding.backgroundlocationtracking.ui.theme.LightGray
 
@@ -52,12 +54,12 @@ fun MainScaffoldScreen(
 ) {
     val context = LocalContext.current
     var currentScreen by rememberSaveable { mutableStateOf(Screen.HomeScreen) }
+    val preferenceHelper = PreferenceHelper(context)
     BackHandler {
         // Exit the app when back button is pressed
             (context as? Activity)?.finish()
-
-
     }
+    Log.d("Preference Data", "User ID: ${preferenceHelper.userId}, Name: ${preferenceHelper.name}, Email: ${preferenceHelper.email}")
     Scaffold(
 //        topBar = {
 //            //TODO: Add top bar

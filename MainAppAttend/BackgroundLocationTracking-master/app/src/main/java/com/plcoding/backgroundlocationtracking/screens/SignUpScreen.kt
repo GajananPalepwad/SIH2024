@@ -29,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,12 +49,12 @@ import com.plcoding.backgroundlocationtracking.api.ApiService
 import com.plcoding.backgroundlocationtracking.api.RetrofitClient
 import com.plcoding.backgroundlocationtracking.components.AppTextField
 import com.plcoding.backgroundlocationtracking.components.DropDownMenu
-import com.plcoding.backgroundlocationtracking.models.request.EmployeeRegistration
-import com.plcoding.backgroundlocationtracking.models.response.ApiResponse
-import com.plcoding.backgroundlocationtracking.models.response.EmployeePositionListResponse
-import com.plcoding.backgroundlocationtracking.models.response.OfficeListResponse
-import com.plcoding.backgroundlocationtracking.models.response.OrganisationData
-import com.plcoding.backgroundlocationtracking.models.response.OrganisationListResponse
+import com.plcoding.backgroundlocationtracking.apimodels.request.EmployeeRegistration
+import com.plcoding.backgroundlocationtracking.apimodels.response.ApiResponse
+import com.plcoding.backgroundlocationtracking.apimodels.response.EmployeePositionListResponse
+import com.plcoding.backgroundlocationtracking.apimodels.response.OfficeListResponse
+import com.plcoding.backgroundlocationtracking.apimodels.response.OrganisationData
+import com.plcoding.backgroundlocationtracking.apimodels.response.OrganisationListResponse
 import com.plcoding.backgroundlocationtracking.navigation.Screen
 import retrofit2.Call
 import retrofit2.Callback
@@ -69,7 +68,7 @@ fun SignUpScreen(
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
-    val BASE_URL = "https://sggsapp.co.in/sih/"//context.getString(R.string.base_url)
+    val BASE_URL = context.getString(R.string.base_url)
     val retrofit = RetrofitClient.getClient(BASE_URL)
     val apiService = retrofit?.create(ApiService::class.java)
 
@@ -176,9 +175,9 @@ fun SignUpScreen(
                     selectedValue = orgName,
                     options = organizations,
                     label = "Select Organization",
-                    onValueChangedEvent = { selectedValue, Index ->
+                    onValueChangedEvent = { selectedValue, index ->
                         orgName = selectedValue
-                        selectedOrgIndex = Index
+                        selectedOrgIndex = index
                         getOfficeList(
                             offices,
                             apiService,
@@ -192,9 +191,9 @@ fun SignUpScreen(
                     selectedValue = offName,
                     options = offices,
                     label = "Select Office",
-                    onValueChangedEvent = { selectedValue, Index ->
+                    onValueChangedEvent = { selectedValue, index ->
                         offName = selectedValue
-                        selectedOfficeIndex = Index
+                        selectedOfficeIndex = index
                         getEmployeePositionList(
                             positions,
                             apiService,
@@ -208,9 +207,9 @@ fun SignUpScreen(
                     selectedValue = workingPosition,
                     options = positions,
                     label = "Select You Position",
-                    onValueChangedEvent = { selectedValue, Index ->
+                    onValueChangedEvent = { selectedValue, index ->
                         workingPosition = selectedValue
-                        selectedPositionIndex = Index
+                        selectedPositionIndex = index
                     },
                 )
 
@@ -256,7 +255,6 @@ fun SignUpScreen(
 
                         )
                 )
-                val scope = rememberCoroutineScope()
 
                 // Sign Up Button
                 Button(
@@ -360,7 +358,7 @@ private fun getOrganisationList(
             if (response.isSuccessful) {
                 val userResponse = response.body()
                 organisationListResponse = userResponse?.data as MutableList<OrganisationData>
-                if (userResponse?.status == "success") {
+                if (userResponse.status == "success") {
 
                     for (item in userResponse.data) {
                         organizations.add(item.org_name)
