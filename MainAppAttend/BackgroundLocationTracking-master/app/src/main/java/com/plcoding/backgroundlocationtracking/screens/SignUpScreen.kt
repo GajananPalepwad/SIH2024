@@ -155,6 +155,7 @@ fun SignUpScreen(
                 AppTextField(
                     value = name,
                     onValueChange = { name = it },
+                    singleLine = false,
                     label = "Name",
                     keyboardType = KeyboardType.Text
                 )

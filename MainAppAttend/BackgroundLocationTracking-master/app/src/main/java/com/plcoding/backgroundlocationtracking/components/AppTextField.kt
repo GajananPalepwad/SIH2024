@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 fun AppTextField(
     value: String,
     onValueChange: (String) -> Unit,
+    singleLine: Boolean = true,
     label: String,
     keyboardType: KeyboardType
 ) {
@@ -23,7 +24,7 @@ fun AppTextField(
         value = value,
         onValueChange = { onValueChange(it.trim()) },
         label = { Text(label) },
-        singleLine = true,
+        singleLine = singleLine,
         shape = MaterialTheme.shapes.medium,
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType
