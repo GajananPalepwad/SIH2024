@@ -155,7 +155,6 @@ fun SignUpScreen(
                 AppTextField(
                     value = name,
                     onValueChange = { name = it },
-                    singleLine = false,
                     label = "Name",
                     keyboardType = KeyboardType.Text
                 )
@@ -264,20 +263,26 @@ fun SignUpScreen(
 
 
                     onClick = {
-                        // Create an employee object
-                        val employee = EmployeeRegistration(
-                            Name = name.trim(),
-                            EmployeeId = employeeId.trim(),
-                            MobileNumber = mobilenumber.trim(),
-                            Organization = orgName.trim(),
-                            Position = workingPosition.trim(),
-                            Email = email.trim(),
-                            Password = password.trim(),
-                            Org_Id = 1,
-                            Office_Id = 1
-                        )
+                        if (name.isEmpty() || employeeId.isEmpty() || mobilenumber.isEmpty() || orgName.isEmpty() || workingPosition.isEmpty() || email.isEmpty() || password.isEmpty()){
+                            Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }else{
+                            // Create an employee object
+                            val employee = EmployeeRegistration(
+                                Name = name.trim(),
+                                EmployeeId = employeeId.trim(),
+                                MobileNumber = mobilenumber.trim(),
+                                Organization = orgName.trim(),
+                                Position = workingPosition.trim(),
+                                Email = email.trim(),
+                                Password = password.trim(),
+                                Org_Id = 1,
+                                Office_Id = 1
+                            )
 
-                        registerEmployee(employee, apiService, context, navController)
+                            registerEmployee(employee, apiService, context, navController)
+                        }
+
 
                     },
                     modifier = Modifier

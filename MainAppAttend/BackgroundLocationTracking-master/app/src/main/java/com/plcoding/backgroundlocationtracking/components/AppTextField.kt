@@ -16,15 +16,13 @@ import androidx.compose.ui.unit.dp
 fun AppTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    singleLine: Boolean = true,
     label: String,
     keyboardType: KeyboardType
 ) {
     OutlinedTextField(
         value = value,
-        onValueChange = { onValueChange(it.trim()) },
+        onValueChange = { onValueChange(it) },
         label = { Text(label) },
-        singleLine = singleLine,
         shape = MaterialTheme.shapes.medium,
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType
