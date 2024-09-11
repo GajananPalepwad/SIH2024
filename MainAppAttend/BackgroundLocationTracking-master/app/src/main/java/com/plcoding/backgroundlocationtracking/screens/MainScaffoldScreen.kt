@@ -1,6 +1,8 @@
 package com.plcoding.backgroundlocationtracking.screens
 
+import android.app.Activity
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,7 +50,14 @@ import com.plcoding.backgroundlocationtracking.ui.theme.LightGray
 fun MainScaffoldScreen(
     navController: NavController
 ) {
+    val context = LocalContext.current
     var currentScreen by rememberSaveable { mutableStateOf(Screen.HomeScreen) }
+    BackHandler {
+        // Exit the app when back button is pressed
+            (context as? Activity)?.finish()
+
+
+    }
     Scaffold(
 //        topBar = {
 //            //TODO: Add top bar
