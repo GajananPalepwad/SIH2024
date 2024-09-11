@@ -1,5 +1,8 @@
 package com.plcoding.backgroundlocationtracking.screens
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -39,7 +43,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.plcoding.backgroundlocationtracking.R
+import com.plcoding.backgroundlocationtracking.api.ApiService
+import com.plcoding.backgroundlocationtracking.api.RetrofitClient
+import com.plcoding.backgroundlocationtracking.models.request.EmployeeLogin
+import com.plcoding.backgroundlocationtracking.models.request.EmployeeRegistration
+import com.plcoding.backgroundlocationtracking.models.response.ApiResponse
 import com.plcoding.backgroundlocationtracking.navigation.Screen
+import okhttp3.Callback
+import retrofit2.Call
+import retrofit2.Response
 
 @Composable
 fun SignInScreen(
@@ -61,9 +73,13 @@ fun SignInScreen(
         }
         val context = LocalContext.current
 
+        val BASE_URL = "https://sggsapp.co.in/sih/"//context.getString(R.string.base_url)
+        val retrofit = RetrofitClient.getClient(BASE_URL)
+        val apiService = retrofit?.create(ApiService::class.java)
+
         // User ID TextField
 
-        Column (modifier = Modifier.fillMaxWidth()){
+        Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = "Sign In",
                 color = MaterialTheme.colorScheme.onSecondary,
@@ -150,8 +166,23 @@ fun SignInScreen(
                 // Sign In Button
                 Button(
                     onClick = {
-                        //TODO Sign In
-                        navController.navigate(Screen.MainScaffoldScreen.route)
+                        if (email.isEmpty() || password.isEmpty()) {
+                            Toast.makeText(
+                                context,
+                                "Please fill all the fields",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@Button
+                        } else {
+                            signInEmployee(
+                                employee = EmployeeLogin(
+                                    email, password
+                                ), navController = navController,
+                                context = context,
+                                apiService = apiService
+                            )
+                        }
+
 
                     },
                     modifier = Modifier
@@ -178,6 +209,38 @@ fun SignInScreen(
         }
     }
 }
+
+private fun signInEmployee(
+    employee: EmployeeLogin,
+    apiService: ApiService?,
+    context: Context,
+    navController: NavController
+) {
+    apiService?.employeeLogin(employee)?.enqueue(object : retrofit2.Callback<ApiResponse> {
+        override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+            if (response.isSuccessful) {
+                val userResponse = response.body()
+
+
+                if (userResponse?.status == "success") {
+                    navController.navigate(Screen.MainScaffoldScreen.route)
+                }else if(userResponse?.status == "error"){
+                    Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+                }
+
+            } else {
+                Log.d("SignIn", "Login failed: ${response.message()}")
+                Toast.makeText(context, "Login failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+            Log.d("SignIn", "Network Error: ${t.message}")
+            Toast.makeText(context, "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
+        }
+    })
+}
+
 
 @Preview(showBackground = true)
 @Composable

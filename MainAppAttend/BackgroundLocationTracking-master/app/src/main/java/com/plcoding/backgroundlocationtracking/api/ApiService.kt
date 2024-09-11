@@ -1,5 +1,6 @@
 package com.plcoding.backgroundlocationtracking.api
 
+import com.plcoding.backgroundlocationtracking.models.request.EmployeeLogin
 import com.plcoding.backgroundlocationtracking.models.request.EmployeeRegistration
 import com.plcoding.backgroundlocationtracking.models.response.ApiResponse
 import com.plcoding.backgroundlocationtracking.models.response.EmployeePositionListResponse
@@ -24,5 +25,8 @@ interface ApiService {
 
     @GET("get_position_list.php")
     fun getPositionList(@Query ("office_id") office_id:Int):Call<EmployeePositionListResponse>
+
+    @POST("employee_login.php")
+    fun employeeLogin(@Body user: EmployeeLogin):Call<ApiResponse>
 
 }
