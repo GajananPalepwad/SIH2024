@@ -235,6 +235,7 @@ private fun signInEmployee(
                     preferenceHelper.officeId = userResponse.user.office_id
                     preferenceHelper.position = userResponse.user.position
                     preferenceHelper.approved = userResponse.user.approved
+                    preferenceHelper.employeeId = userResponse.user.employeeId
 
                     navController.navigate(Screen.MainScaffoldScreen.route)
                 } else if (userResponse?.status == "error") {

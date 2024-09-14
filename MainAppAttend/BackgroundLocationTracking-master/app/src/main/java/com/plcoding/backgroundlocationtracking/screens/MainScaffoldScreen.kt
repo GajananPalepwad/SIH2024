@@ -59,7 +59,8 @@ fun MainScaffoldScreen(
         // Exit the app when back button is pressed
             (context as? Activity)?.finish()
     }
-    Log.d("Preference Data", "User ID: ${preferenceHelper.userId}, Name: ${preferenceHelper.name}, Email: ${preferenceHelper.email}")
+
+//    Log.d("Preference Data", "User ID: ${preferenceHelper.userId}, Name: ${preferenceHelper.name}, Email: ${preferenceHelper.email}")
     Scaffold(
 //        topBar = {
 //            //TODO: Add top bar

@@ -10,6 +10,7 @@ import com.plcoding.backgroundlocationtracking.screens.EditUserDetailsScreen
 import com.plcoding.backgroundlocationtracking.screens.MainScaffoldScreen
 import com.plcoding.backgroundlocationtracking.screens.SignInScreen
 import com.plcoding.backgroundlocationtracking.screens.SignUpScreen
+import com.plcoding.backgroundlocationtracking.screens.SplashScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -17,7 +18,7 @@ fun Navigation(
     navController: NavHostController,
 ) {
 
-    NavHost(navController = navController, startDestination = Screen.SignInScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
 
         composable(Screen.SignUpScreen.route){
             SignUpScreen(navController = navController)
@@ -31,6 +32,9 @@ fun Navigation(
         }
         composable(Screen.UserDetailsEditScreen.route){
             EditUserDetailsScreen(navController = navController)
+        }
+        composable(Screen.SplashScreen.route){
+            SplashScreen(navController = navController)
         }
 
         //TODO Add more screens here
