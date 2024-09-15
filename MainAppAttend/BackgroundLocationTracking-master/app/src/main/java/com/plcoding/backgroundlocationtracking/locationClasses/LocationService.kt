@@ -13,6 +13,7 @@ import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.LocationServices
 import com.plcoding.backgroundlocationtracking.R
+import com.plcoding.backgroundlocationtracking.data.PreferenceHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -65,6 +66,8 @@ class LocationService: Service() {
             .setOngoing(true)
             .build()
 
+        val preferenceHelper = PreferenceHelper(this)
+
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         locationClient
@@ -81,7 +84,7 @@ class LocationService: Service() {
                     .setOngoing(true)
                     .build()
                 // this will check 200 meter
-                checkLocation(location.latitude, location.longitude)
+                checkLocation(location.latitude, location.longitude, preferenceHelper)
                 notificationManager.notify(NOTIFICATION_ID, updatedNotification)
             }
             .launchIn(serviceScope)
@@ -150,10 +153,10 @@ class LocationService: Service() {
         return R * c // Distance in meters
     }
 
-    fun checkLocation(liveLat: Double, liveLon: Double) {
-        val officeLat = 19.113658// add sharedpref lat
-        val officeLon = 77.288203// add sharedpref lon
-        val distance = haversine(liveLat, liveLon, officeLat, officeLon)
+    fun checkLocation(liveLat: Double, liveLon: Double, preferenceHelper: PreferenceHelper) {
+        val officeLat = preferenceHelper.latitude?.toDouble()
+        val officeLon = preferenceHelper.longitude?.toDouble()
+        val distance = haversine(liveLat, liveLon, officeLat?:0.0, officeLon?:0.0)
         if (distance > 200) {
             sendNotification("Location Alert", "You are outside the 200-meter radius of the office.")
         }else{
