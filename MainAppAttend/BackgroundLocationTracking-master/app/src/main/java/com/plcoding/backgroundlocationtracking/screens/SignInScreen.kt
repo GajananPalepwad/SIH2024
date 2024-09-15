@@ -53,11 +53,11 @@ import retrofit2.Response
 
 @Composable
 fun SignInScreen(
-    navController: NavController
+    navController: NavController,
+    preferenceHelper: PreferenceHelper
 ) {
     // Sign In Screen
     val context = LocalContext.current
-    val preferenceHelper = PreferenceHelper(context)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,7 +72,6 @@ fun SignInScreen(
         val passwordVisible = remember {
             mutableStateOf(false)
         }
-        val context = LocalContext.current
 
         val BASE_URL = context.getString(R.string.base_url)
         val retrofit = RetrofitClient.getClient(BASE_URL)
@@ -220,7 +219,10 @@ private fun signInEmployee(
     preferenceHelper: PreferenceHelper
 ) {
     apiService?.employeeLogin(employee)?.enqueue(object : Callback<EmployeeSignInResponse> {
-        override fun onResponse(call: Call<EmployeeSignInResponse>, response: Response<EmployeeSignInResponse>) {
+        override fun onResponse(
+            call: Call<EmployeeSignInResponse>,
+            response: Response<EmployeeSignInResponse>
+        ) {
             if (response.isSuccessful) {
                 val userResponse = response.body()
 
@@ -228,23 +230,21 @@ private fun signInEmployee(
 
                     // Store user data in preferences
                     preferenceHelper.userId = userResponse.user.user_id
-                    preferenceHelper.name = userResponse.user.name
-                    preferenceHelper.email = userResponse.user.email
-                    preferenceHelper.mobileNumber = userResponse.user.mobile_number
-                    preferenceHelper.orgId = userResponse.user.org_id
-                    preferenceHelper.officeId = userResponse.user.office_id
-                    preferenceHelper.position = userResponse.user.position
-                    preferenceHelper.approved = userResponse.user.approved
-                    preferenceHelper.employeeId = userResponse.user.employeeId
-
-                    navController.navigate(Screen.MainScaffoldScreen.route)
+                    getUserDetails(
+                        preferenceHelper.userId,
+                        apiService,
+                        preferenceHelper,
+                        context,
+                        navController
+                    )
                 } else if (userResponse?.status == "error") {
                     Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
                 }
 
             } else {
                 Log.d("SignIn", "Login failed: ${response.message()}")
-                Toast.makeText(context, "Login failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Login failed: ${response.message()}", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -256,8 +256,3 @@ private fun signInEmployee(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun SignInScreenPreview() {
-    SignInScreen(navController = NavController(LocalContext.current))
-}

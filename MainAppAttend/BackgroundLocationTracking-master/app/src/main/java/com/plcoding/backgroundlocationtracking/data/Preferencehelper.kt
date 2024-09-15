@@ -19,6 +19,8 @@ class PreferenceHelper(context: Context) {
         private const val ORG_ID = "org_id"
         private const val OFFICE_ID = "office_id"
         private const val APPROVED = "approved"
+        private const val LATITUDE = "latitude"
+        private const val LONGITUDE = "longitude"
     }
 
     var userId: Int
@@ -73,5 +75,15 @@ class PreferenceHelper(context: Context) {
         get() = sharedPreferences.getInt(APPROVED, 0)
         set(value) {
             sharedPreferences.edit().putInt(APPROVED, value).apply()
+        }
+    var latitude: String?
+        get() = sharedPreferences.getString(LATITUDE, null)
+        set(value) {
+            sharedPreferences.edit().putString(LATITUDE, value).apply()
+        }
+    var longitude:String?
+        get() = sharedPreferences.getString(LONGITUDE, null)
+        set(value) {
+            sharedPreferences.edit().putString(LONGITUDE, value).apply()
         }
 }

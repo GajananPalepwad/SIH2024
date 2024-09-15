@@ -7,6 +7,8 @@ import com.plcoding.backgroundlocationtracking.apimodels.response.EmployeePositi
 import com.plcoding.backgroundlocationtracking.apimodels.response.EmployeeSignInResponse
 import com.plcoding.backgroundlocationtracking.apimodels.response.OfficeListResponse
 import com.plcoding.backgroundlocationtracking.apimodels.response.OrganisationListResponse
+import com.plcoding.backgroundlocationtracking.apimodels.response.UserDetailsData
+import com.plcoding.backgroundlocationtracking.apimodels.response.UserDetailsResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -29,5 +31,8 @@ interface ApiService {
 
     @POST("employee_login.php")
     fun employeeLogin(@Body user: EmployeeLogin):Call<EmployeeSignInResponse>
+
+    @GET("get_office_co.php")
+    fun getOfficeCo(@Query ("user") user_id:Int):Call<UserDetailsResponse>
 
 }

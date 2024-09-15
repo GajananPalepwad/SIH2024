@@ -45,10 +45,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.plcoding.backgroundlocationtracking.R
 import com.plcoding.backgroundlocationtracking.components.AppTextField
+import com.plcoding.backgroundlocationtracking.data.PreferenceHelper
 import com.plcoding.backgroundlocationtracking.navigation.Screen
 
 @Composable
-fun EditUserDetailsScreen(navController: NavController) {
+fun EditUserDetailsScreen(navController: NavController, preferenceHelper: PreferenceHelper) {
     // Remember mutable states for email, mobile number, and name
     var email by remember { mutableStateOf("") }
     var mobileNumber by remember { mutableStateOf("") }
