@@ -39,20 +39,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) {
 ////////////////////////////////Buttons to start and end background services////////////////////////////////////
-//                    Row {
-//                        Button(onClick = {
-//                            Intent(applicationContext, LocationService::class.java).apply {
-//                                action = LocationService.ACTION_START
-//                                startService(this)
-//                            }
-//                        }) { Text(text = "Start") }
-//                        Button(onClick = {
-//                            Intent(applicationContext, LocationService::class.java).apply {
-//                                action = LocationService.ACTION_STOP
-//                                startService(this)
-//                            }
-//                        }) { Text(text = "Stop") }
-//                    }
+                    Row {
+                        Button(onClick = {
+                            Intent(applicationContext, LocationService::class.java).apply {
+                                action = LocationService.ACTION_START
+                                startService(this)
+                            }
+                        }) { Text(text = "Start") }
+                        Button(onClick = {
+                            Intent(applicationContext, LocationService::class.java).apply {
+                                action = LocationService.ACTION_STOP
+                                startService(this)
+                            }
+                        }) { Text(text = "Stop") }
+                    }
 
                     Navigation(navController = rememberNavController(), preferenceHelper = PreferenceHelper(
                         LocalContext.current))

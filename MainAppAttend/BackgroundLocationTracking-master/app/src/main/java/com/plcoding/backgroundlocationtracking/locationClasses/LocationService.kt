@@ -20,6 +20,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlin.math.*
 
 class LocationService: Service() {
 
@@ -79,7 +80,8 @@ class LocationService: Service() {
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setOngoing(true)
                     .build()
-
+                // this will check 200 meter
+                checkLocation(location.latitude, location.longitude)
                 notificationManager.notify(NOTIFICATION_ID, updatedNotification)
             }
             .launchIn(serviceScope)
@@ -134,4 +136,40 @@ class LocationService: Service() {
         const val CHANNEL_ID = "location"
         const val NOTIFICATION_ID = 1
     }
+
+    private fun haversine(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val R = 6371000.0 // Radius of the Earth in meters
+        val dLat = Math.toRadians(lat2 - lat1)
+        val dLon = Math.toRadians(lon2 - lon1)
+
+        val a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
+                sin(dLon / 2) * sin(dLon / 2)
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        return R * c // Distance in meters
+    }
+
+    fun checkLocation(liveLat: Double, liveLon: Double) {
+        val officeLat = 19.113658// add sharedpref lat
+        val officeLon = 77.288203// add sharedpref lon
+        val distance = haversine(liveLat, liveLon, officeLat, officeLon)
+        if (distance > 200) {
+            sendNotification("Location Alert", "You are outside the 200-meter radius of the office.")
+        }else{
+            sendNotification("Location Alert", "You are inside the 200-meter radius of the office.")
+        }
+    }
+
+    private fun sendNotification(title: String, content: String) {
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .build()
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(NOTIFICATION_ID + 1, notification) // Unique ID for this notification
+    }
+
 }
