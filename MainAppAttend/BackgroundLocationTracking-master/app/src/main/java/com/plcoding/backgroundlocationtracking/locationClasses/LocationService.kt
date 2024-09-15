@@ -13,6 +13,7 @@ import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.LocationServices
 import com.plcoding.backgroundlocationtracking.R
+import com.plcoding.backgroundlocationtracking.data.PreferenceHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -26,6 +27,8 @@ class LocationService: Service() {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationClient: LocationClient
+    private lateinit var preferenceHelper: PreferenceHelper
+
 
     override fun onBind(p0: Intent?): IBinder? {
         return null
@@ -37,7 +40,7 @@ class LocationService: Service() {
             applicationContext,
             LocationServices.getFusedLocationProviderClient(applicationContext)
         )
-
+        preferenceHelper = PreferenceHelper(applicationContext)
         // Notification Channel creation for Oreo and above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -71,8 +74,8 @@ class LocationService: Service() {
             .getLocationUpdates(10L)
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
-                val lat = String.format("%.5f", location.latitude)
-                val long = String.format("%.5f", location.longitude)
+                val lat = location.latitude.toString()
+                val long = location.longitude.toString()
                 val updatedNotification = NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("Tracking location...")
                     .setContentText("Location: ($lat, $long)")
@@ -151,8 +154,8 @@ class LocationService: Service() {
     }
 
     fun checkLocation(liveLat: Double, liveLon: Double) {
-        val officeLat = 19.113658// add sharedpref lat
-        val officeLon = 77.288203// add sharedpref lon
+        val officeLat = preferenceHelper.latitude.toString().toDouble()  ?: 0.0// add sharedpref lat
+        val officeLon = preferenceHelper.longitude.toString().toDouble()  ?: 0.0// add sharedpref lon
         val distance = haversine(liveLat, liveLon, officeLat, officeLon)
         if (distance > 200) {
             sendNotification("Location Alert", "You are outside the 200-meter radius of the office.")
