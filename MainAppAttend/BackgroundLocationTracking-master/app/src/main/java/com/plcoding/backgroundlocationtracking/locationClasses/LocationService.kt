@@ -68,6 +68,8 @@ class LocationService: Service() {
             .setOngoing(true)
             .build()
 
+        val preferenceHelper = PreferenceHelper(this)
+
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         locationClient
@@ -84,7 +86,7 @@ class LocationService: Service() {
                     .setOngoing(true)
                     .build()
                 // this will check 200 meter
-                checkLocation(location.latitude, location.longitude)
+                checkLocation(location.latitude, location.longitude, preferenceHelper)
                 notificationManager.notify(NOTIFICATION_ID, updatedNotification)
             }
             .launchIn(serviceScope)
