@@ -1,5 +1,7 @@
 package com.plcoding.backgroundlocationtracking.api
 
+import com.plcoding.backgroundlocationtracking.apimodels.request.CheckInRequest
+import com.plcoding.backgroundlocationtracking.apimodels.request.CheckOutRequest
 import com.plcoding.backgroundlocationtracking.apimodels.request.EmployeeLogin
 import com.plcoding.backgroundlocationtracking.apimodels.request.EmployeeRegistration
 import com.plcoding.backgroundlocationtracking.apimodels.response.ApiResponse
@@ -34,5 +36,11 @@ interface ApiService {
 
     @GET("get_office_co.php")
     fun getOfficeCo(@Query ("user") user_id:Int):Call<UserDetailsResponse>
+
+    @POST("check_in.php")
+    fun checkIn(@Body userCheckInRequest: CheckInRequest):Call<ApiResponse>
+
+    @POST("check_out.php")
+    fun checkOut(@Body userCheckOutRequest: CheckOutRequest):Call<ApiResponse>
 
 }

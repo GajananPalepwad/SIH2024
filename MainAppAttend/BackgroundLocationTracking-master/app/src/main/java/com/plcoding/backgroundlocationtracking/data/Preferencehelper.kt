@@ -21,6 +21,7 @@ class PreferenceHelper(context: Context) {
         private const val APPROVED = "approved"
         private const val LATITUDE = "latitude"
         private const val LONGITUDE = "longitude"
+        private const val IS_CHECKED_IN = "is_checked_in"
     }
 
     var userId: Int
@@ -86,4 +87,12 @@ class PreferenceHelper(context: Context) {
         set(value) {
             sharedPreferences.edit().putString(LONGITUDE, value).apply()
         }
+
+    var isCheckedIn: Boolean
+        get() = sharedPreferences.getBoolean(IS_CHECKED_IN, false)
+        set(value) {
+            sharedPreferences.edit().putBoolean(IS_CHECKED_IN, value).apply()
+        }
+
+
 }
